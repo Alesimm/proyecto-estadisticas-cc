@@ -1,9 +1,13 @@
 package com.ccanalytics.jugadores_service.controller;
 
 import com.ccanalytics.jugadores_service.entity.Jugador;
-import com.ccanalytics.jugadores_service.repository.JugadorRepository;
+import com.ccanalytics.jugadores_service.service.JugadorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -11,15 +15,16 @@ import java.util.List;
 public class JugadorController {
 
     @Autowired
-    private JugadorRepository jugadorRepository;
+    private JugadorService jugadorService;
 
     @GetMapping
-    public List<Jugador> listarJugadores() {
-        return jugadorRepository.findAll();
+    public ResponseEntity<List<Jugador>> listarJugadores() {
+        return ResponseEntity.ok(jugadorService.listarTodos());
     }
 
     @PostMapping
-    public Jugador guardarJugador(@RequestBody Jugador jugador) {
-        return jugadorRepository.save(jugador);
+    public ResponseEntity<Jugador> guardarJugador(@Valid @RequestBody Jugador jugador) {
+        Jugador nuevoJugador = jugadorService.guardarJugador(jugador);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoJugador);
     }
 }
