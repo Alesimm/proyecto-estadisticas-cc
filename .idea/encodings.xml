@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/formaciones-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jugadores-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/partidosservice/src/main/java" charset="UTF-8" />
   </component>
 </project>
