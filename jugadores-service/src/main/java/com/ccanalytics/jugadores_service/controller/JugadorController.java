@@ -1,6 +1,7 @@
 package com.ccanalytics.jugadores_service.controller;
 
-import com.ccanalytics.jugadores_service.entity.Jugador;
+import com.ccanalytics.jugadores_service.dto.JugadorRequestDTO;
+import com.ccanalytics.jugadores_service.dto.JugadorResponseDTO;
 import com.ccanalytics.jugadores_service.service.JugadorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,19 @@ public class JugadorController {
     private JugadorService jugadorService;
 
     @GetMapping
-    public ResponseEntity<List<Jugador>> listarJugadores() {
+    public ResponseEntity<List<JugadorResponseDTO>> listarJugadores() {
         return ResponseEntity.ok(jugadorService.listarTodos());
     }
 
     @PostMapping
-    public ResponseEntity<Jugador> guardarJugador(@Valid @RequestBody Jugador jugador) {
-        Jugador nuevoJugador = jugadorService.guardarJugador(jugador);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoJugador);
+    public ResponseEntity<JugadorResponseDTO> guardarJugador(@Valid @RequestBody JugadorRequestDTO requestDTO) {
+        JugadorResponseDTO nuevo = jugadorService.guardarJugador(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
-}
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarJugador(@PathVariable Long id) {
+        jugadorService.eliminarJugador(id);
+        return ResponseEntity.noContent().build();
+    }
+}   
