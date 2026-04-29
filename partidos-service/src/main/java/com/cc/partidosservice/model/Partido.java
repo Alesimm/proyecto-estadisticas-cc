@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // <-- ESTA ES LA CLAVE: Genera automáticamente getRival() y setRival()
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

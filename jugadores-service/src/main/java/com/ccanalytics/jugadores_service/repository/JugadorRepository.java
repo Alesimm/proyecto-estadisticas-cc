@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JugadorRepository extends JpaRepository<Jugador, Long> {
+
+    //regla de negocio
+    boolean existsByNumeroCamiseta(Integer numeroCamiseta);
 }

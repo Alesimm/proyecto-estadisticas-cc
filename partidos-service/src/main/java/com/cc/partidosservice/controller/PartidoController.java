@@ -27,10 +27,9 @@ public class PartidoController {
         return ResponseEntity.status(201).body(partidoService.guardar(partido));
     }
 
-    // DELETE: Para borrar un partido usando su ID en la URL
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         partidoService.eliminar(id);
-        return ResponseEntity.noContent().build(); // Retorna un estado 204 (Sin contenido)
+        return ResponseEntity.noContent().build();
     }
 }
