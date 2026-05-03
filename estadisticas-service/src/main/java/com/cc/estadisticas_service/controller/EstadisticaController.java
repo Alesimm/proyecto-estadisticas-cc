@@ -1,37 +1,52 @@
 package com.cc.estadisticas_service.controller;
 
-import com.cc.estadisticas_service.dto.EstadisticaDTO;
+import com.cc.estadisticas_service.dto.EstadisticaRequestDTO;
+import com.cc.estadisticas_service.dto.EstadisticaResponseDTO;
 import com.cc.estadisticas_service.service.EstadisticaService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/estadisticas")
+@RequiredArgsConstructor
 public class EstadisticaController {
 
     private final EstadisticaService service;
 
-    public EstadisticaController(EstadisticaService service) {
-        this.service = service;
-    }
-
     @PostMapping
-    public ResponseEntity<EstadisticaDTO> crearEstadistica(@Valid @RequestBody EstadisticaDTO estadisticaDTO) {
-        log.info("Petición REST POST recibida para crear estadística");
-        EstadisticaDTO nuevaEstadistica = service.guardar(estadisticaDTO);
+    public ResponseEntity<EstadisticaResponseDTO> crearEstadistica(@Valid @RequestBody EstadisticaRequestDTO requestDTO) {
+        EstadisticaResponseDTO nuevaEstadistica = service.guardar(requestDTO);
         return new ResponseEntity<>(nuevaEstadistica, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EstadisticaDTO>> listarEstadisticas() {
-        log.info("Petición REST GET recibida en /api/estadisticas");
-        List<EstadisticaDTO> estadisticas = service.listarTodas();
+    public ResponseEntity<List<EstadisticaResponseDTO>> listarEstadisticas() {
+        List<EstadisticaResponseDTO> estadisticas = service.listarTodas();
         return new ResponseEntity<>(estadisticas, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EstadisticaResponseDTO> obtenerEstadisticaPorId(@PathVariable Long id) {
+        EstadisticaResponseDTO response = service.obtenerPorId(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EstadisticaResponseDTO> actualizarEstadistica(
+            @PathVariable Long id,
+            @Valid @RequestBody EstadisticaRequestDTO requestDTO) {
+        EstadisticaResponseDTO response = service.actualizar(id, requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarEstadistica(@PathVariable Long id) {
+        service.eliminar(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
