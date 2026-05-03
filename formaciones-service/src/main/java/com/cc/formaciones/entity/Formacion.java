@@ -1,13 +1,12 @@
 package com.cc.formaciones.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "formaciones")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Formacion {
@@ -16,13 +15,15 @@ public class Formacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String nombre;
+    @Column(name = "partido_id", nullable = false)
+    private Long partidoId;
 
-    private String descripcion;
+    @Column(name = "equipo_id", nullable = false)
+    private Long equipoId;
 
-    private int defensas;
-    private int mediocampistas;
-    private int delanteros;
+    @Column(name = "esquema_tactico", nullable = false, length = 15)
+    private String esquemaTactico;
 
+    @Column(name = "director_tecnico", nullable = false, length = 100)
+    private String directorTecnico;
 }

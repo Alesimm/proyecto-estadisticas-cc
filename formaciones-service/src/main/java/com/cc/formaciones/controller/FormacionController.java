@@ -1,37 +1,52 @@
 package com.cc.formaciones.controller;
 
-import com.cc.formaciones.dto.FormacionDTO;
+import com.cc.formaciones.dto.FormacionRequestDTO;
+import com.cc.formaciones.dto.FormacionResponseDTO;
 import com.cc.formaciones.service.FormacionService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/formaciones")
+@RequiredArgsConstructor
 public class FormacionController {
 
     private final FormacionService formacionService;
 
-    public FormacionController(FormacionService formacionService) {
-        this.formacionService = formacionService;
-    }
-
     @PostMapping
-    public ResponseEntity<FormacionDTO> crearFormacion(@Valid @RequestBody FormacionDTO formacionDTO) {
-        log.info("Petición REST POST recibida en /api/formaciones");
-        FormacionDTO nuevaFormacion = formacionService.crearFormacion(formacionDTO);
-        return new ResponseEntity<>(nuevaFormacion, HttpStatus.CREATED);
+    public ResponseEntity<FormacionResponseDTO> crearFormacion(@Valid @RequestBody FormacionRequestDTO requestDTO) {
+        FormacionResponseDTO response = formacionService.registrarFormacion(requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<FormacionDTO>> obtenerTodas() {
-        log.info("Petición REST GET recibida en /api/formaciones");
-        List<FormacionDTO> formaciones = formacionService.obtenerTodas();
+    public ResponseEntity<List<FormacionResponseDTO>> listarFormaciones() {
+        List<FormacionResponseDTO> formaciones = formacionService.obtenerTodas();
         return new ResponseEntity<>(formaciones, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FormacionResponseDTO> obtenerFormacionPorId(@PathVariable Long id) {
+        FormacionResponseDTO response = formacionService.obtenerPorId(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FormacionResponseDTO> actualizarFormacion(
+            @PathVariable Long id,
+            @Valid @RequestBody FormacionRequestDTO requestDTO) {
+        FormacionResponseDTO response = formacionService.actualizarFormacion(id, requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarFormacion(@PathVariable Long id) {
+        formacionService.eliminarFormacion(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

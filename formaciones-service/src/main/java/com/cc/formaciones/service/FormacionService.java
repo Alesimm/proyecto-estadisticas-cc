@@ -1,63 +1,99 @@
 package com.cc.formaciones.service;
 
-import com.cc.formaciones.dto.FormacionDTO;
+import com.cc.formaciones.dto.FormacionRequestDTO;
+import com.cc.formaciones.dto.FormacionResponseDTO;
 import com.cc.formaciones.entity.Formacion;
 import com.cc.formaciones.repository.FormacionRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j // Anotación para activar los logs estructurados
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class FormacionService {
 
     private final FormacionRepository formacionRepository;
 
-    public FormacionService(FormacionRepository formacionRepository) {
-        this.formacionRepository = formacionRepository;
+    public FormacionResponseDTO registrarFormacion(FormacionRequestDTO requestDTO) {
+        log.info("Iniciando registro de nueva formación para el equipo ID: {}", requestDTO.getEquipoId());
+
+        validarEsquemaTactico(requestDTO.getEsquemaTactico());
+
+        Formacion nuevaFormacion = Formacion.builder()
+                .partidoId(requestDTO.getPartidoId())
+                .equipoId(requestDTO.getEquipoId())
+                .esquemaTactico(requestDTO.getEsquemaTactico())
+                .directorTecnico(requestDTO.getDirectorTecnico())
+                .build();
+
+        Formacion guardada = formacionRepository.save(nuevaFormacion);
+        log.info("Formación registrada exitosamente con ID: {}", guardada.getId());
+
+        return mapearAResponseDTO(guardada, "Formación registrada con éxito");
     }
 
-    public FormacionDTO crearFormacion(FormacionDTO dto) {
-        log.info("Iniciando creación de la formación: {}", dto.getNombre());
-
-        // 1. Validación de negocio
-        int totalJugadores = dto.getDefensas() + dto.getMediocampistas() + dto.getDelanteros();
-
-        if (totalJugadores != 10) {
-            log.error("Error Táctico: La suma de jugadores es {}, se esperaban 10", totalJugadores);
-            throw new IllegalArgumentException("Error Táctico: La formación debe tener exactamente 10 jugadores de campo. Suma actual: " + totalJugadores);
-        }
-
-        // 2. Mapeo DTO -> Entidad
-        Formacion entidad = new Formacion();
-        entidad.setNombre(dto.getNombre());
-        entidad.setDescripcion(dto.getDescripcion());
-        entidad.setDefensas(dto.getDefensas());
-        entidad.setMediocampistas(dto.getMediocampistas());
-        entidad.setDelanteros(dto.getDelanteros());
-
-        // 3. Guardar en BD
-        Formacion guardada = formacionRepository.save(entidad);
-        log.info("Formación guardada exitosamente en BD con ID: {}", guardada.getId());
-
-        // 4. Actualizar ID y devolver DTO
-        dto.setId(guardada.getId());
-        return dto;
-    }
-
-    public List<FormacionDTO> obtenerTodas() {
+    public List<FormacionResponseDTO> obtenerTodas() {
         log.info("Consultando todas las formaciones en la base de datos");
-        return formacionRepository.findAll().stream().map(entidad -> {
-            FormacionDTO dto = new FormacionDTO();
-            dto.setId(entidad.getId());
-            dto.setNombre(entidad.getNombre());
-            dto.setDescripcion(entidad.getDescripcion());
-            dto.setDefensas(entidad.getDefensas());
-            dto.setMediocampistas(entidad.getMediocampistas());
-            dto.setDelanteros(entidad.getDelanteros());
-            return dto;
-        }).collect(Collectors.toList());
+        return formacionRepository.findAll().stream()
+                .map(formacion -> mapearAResponseDTO(formacion, "OK"))
+                .collect(Collectors.toList());
+    }
+
+    public FormacionResponseDTO obtenerPorId(Long id) {
+        log.info("Buscando formación con ID: {}", id);
+        Formacion formacion = formacionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la formación con el ID: " + id));
+        return mapearAResponseDTO(formacion, "OK");
+    }
+
+    public FormacionResponseDTO actualizarFormacion(Long id, FormacionRequestDTO requestDTO) {
+        log.info("Actualizando formación con ID: {}", id);
+        validarEsquemaTactico(requestDTO.getEsquemaTactico());
+
+        Formacion formacionExistente = formacionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la formación con el ID: " + id + " para actualizar"));
+
+        formacionExistente.setPartidoId(requestDTO.getPartidoId());
+        formacionExistente.setEquipoId(requestDTO.getEquipoId());
+        formacionExistente.setEsquemaTactico(requestDTO.getEsquemaTactico());
+        formacionExistente.setDirectorTecnico(requestDTO.getDirectorTecnico());
+
+        Formacion actualizada = formacionRepository.save(formacionExistente);
+        log.info("Formación ID {} actualizada correctamente", id);
+
+        return mapearAResponseDTO(actualizada, "Formación actualizada con éxito");
+    }
+
+    public void eliminarFormacion(Long id) {
+        log.warn("Solicitud para eliminar la formación con ID: {}", id);
+        Formacion formacion = formacionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se puede eliminar. Formación no encontrada con ID: " + id));
+
+        formacionRepository.delete(formacion);
+        log.info("Formación ID {} eliminada exitosamente", id);
+    }
+
+    // Regla de negocio interna
+    private void validarEsquemaTactico(String esquema) {
+        if (!esquema.contains("-")) {
+            log.error("Esquema táctico inválido intentado: {}", esquema);
+            throw new IllegalArgumentException("El esquema táctico debe contener guiones (Ej: 4-3-3)");
+        }
+    }
+
+    private FormacionResponseDTO mapearAResponseDTO(Formacion formacion, String estado) {
+        return FormacionResponseDTO.builder()
+                .id(formacion.getId())
+                .partidoId(formacion.getPartidoId())
+                .equipoId(formacion.getEquipoId())
+                .esquemaTactico(formacion.getEsquemaTactico())
+                .directorTecnico(formacion.getDirectorTecnico())
+                .estado(estado)
+                .build();
     }
 }
