@@ -7,16 +7,17 @@ import lombok.Data;
 
 @Data
 public class JugadorRequestDTO {
-    @NotBlank(message = "El nombre es obligatorio y no puede estar vacío.")
+
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
-    @NotBlank(message = "El apellido es obligatorio.")
+    @NotBlank(message = "El apellido es obligatorio")
     private String apellido;
 
-    @NotBlank(message = "La posición del jugador es obligatoria.")
+    @NotBlank(message = "La posicion es obligatoria")
     private String posicion;
 
-    @NotNull(message = "El número de camiseta es obligatorio.")
-    @Min(value = 1, message = "El número de camiseta debe ser mayor a 0.")
+    @NotNull(message = "El numero de camiseta es obligatorio")
+    @Min(value = 1, message = "El numero de camiseta debe ser mayor a 0")
     private Integer numeroCamiseta;
 }
