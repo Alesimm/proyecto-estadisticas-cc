@@ -4,31 +4,47 @@ import com.ccanalytics.jugadores_service.dto.JugadorRequestDTO;
 import com.ccanalytics.jugadores_service.dto.JugadorResponseDTO;
 import com.ccanalytics.jugadores_service.entity.Jugador;
 import com.ccanalytics.jugadores_service.repository.JugadorRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 public class JugadorService {
 
     @Autowired
     private JugadorRepository jugadorRepository;
 
+    // lista todos los jugadores
     public List<JugadorResponseDTO> listarTodos() {
         return jugadorRepository.findAll().stream()
                 .map(this::mapearAResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public JugadorResponseDTO guardarJugador(JugadorRequestDTO request) {
-        log.info("Guardando jugador con camiseta: {}", request.getNumeroCamiseta());
+    // busca un jugador por su id
+    public JugadorResponseDTO buscarPorId(Long id) {
+        Jugador jugador = jugadorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontro ningun jugador con el ID: " + id));
+        return mapearAResponseDTO(jugador);
+    }
 
+    // busca la lista de jugadores que jueguen en x posicion
+    public List<JugadorResponseDTO> buscarPorPosicion(String posicion) {
+        List<Jugador> jugadores = jugadorRepository.findByPosicionIgnoreCase(posicion);
+        if (jugadores.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron jugadores en la posicion: " + posicion);
+        }
+        return jugadores.stream()
+                .map(this::mapearAResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    // guarda un jugador validando que no se repita la camiseta
+    public JugadorResponseDTO guardarJugador(JugadorRequestDTO request) {
         if (jugadorRepository.existsByNumeroCamiseta(request.getNumeroCamiseta())) {
-            throw new IllegalArgumentException("El número de camiseta ya está ocupado");
+            throw new IllegalArgumentException("El numero de camiseta ya esta ocupado");
         }
 
         Jugador jugador = new Jugador();
@@ -41,6 +57,7 @@ public class JugadorService {
         return mapearAResponseDTO(guardado);
     }
 
+    // elimina usando el id
     public void eliminarJugador(Long id) {
         if (!jugadorRepository.existsById(id)) {
             throw new IllegalArgumentException("El jugador no existe");
@@ -48,6 +65,7 @@ public class JugadorService {
         jugadorRepository.deleteById(id);
     }
 
+    // pasa de entidad a dto para no mostrar la base de datos directo
     private JugadorResponseDTO mapearAResponseDTO(Jugador jugador) {
         JugadorResponseDTO dto = new JugadorResponseDTO();
         dto.setId(jugador.getId());

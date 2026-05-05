@@ -15,4 +15,24 @@
 * Creación de una lógica en el servidor para evitar errores de negocio, como la duplicación de números de camiseta.
 * Desarrollo de un sistema centralizado para capturar fallos y entregar mensajes de error claros al usuario.
 
+**Actualizaciones (Flyway y Busquedas)**
+* **Control de Versiones (Flyway):** Se integro Flyway para automatizar la creacion de la tabla y la insercion de los datos iniciales, asegurando que todos tengan la misma estructura de base de datos.
+* **Optimizacion para XAMPP:** Se actualizo el driver a MariaDB para tener compatibilidad nativa perfecta y evitar errores en las migraciones.
+* **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
+
+
 ---------------------------------------------------------------------------------------------------------------------------------------------
+
+### Joseph Rivas
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+### Cristobal Moya
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
