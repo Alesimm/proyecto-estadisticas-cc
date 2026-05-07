@@ -16,14 +16,10 @@
 * **Optimizacion para XAMPP:** Se actualizo el driver a MariaDB para tener compatibilidad nativa perfecta y evitar errores en las migraciones.
 * **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
   
-**Actualizaciones (Eureka)**
+**Actualizaciones Eliminacion (Eureka)**
 
-* **Fuera lo complejo:** Eliminamos Eureka y el Gateway. Ahora los microservicios se hablan directamente. Esto hace que el sistema sea más rápido de levantar y mucho más fácil de testear en esta etapa.
-* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" moderno para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
-* **Orden en la casa (Patrón CSR):** Limpiamos el código para que cada cosa esté en su lugar. El *Controller* solo recibe los pedidos, el *Service* piensa la lógica y el *Repository* guarda los datos.
-* **Regla de Oro de los 7 Campos:** Ajustamos todos nuestros formularios para que tengan exactamente 7 campos, con validaciones de verdad. Si alguien intenta meter datos malos o duplicar un número de camiseta, el sistema lo frena de inmediato.
-* **Base de datos con Flyway:** Ya no creamos tablas a mano en XAMPP. Ahora el código es el que manda: al iniciar el proyecto, Flyway construye todo solito y deja los datos listos para probar.
-
+* **Principal:** Eliminamos Eureka y el Gateway.
+* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web". Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Joseph Rivas
