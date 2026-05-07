@@ -19,7 +19,7 @@
 **Actualizaciones Eliminacion (Eureka)**
 
 * **Principal:** Eliminamos Eureka y el Gateway.
-* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web". Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
+* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Joseph Rivas
