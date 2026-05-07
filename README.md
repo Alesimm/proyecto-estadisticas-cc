@@ -1,11 +1,7 @@
 ## Seguimiento de tareas por integrante
 ------------------------------------------------------------------
 
-### Alexander Simpertigue (Desarrollador responsable: Eureka-server y Jugadores-service)
-
-**Eureka Server**
-* Configuración del servidor de descubrimiento para permitir la comunicación entre todos los microservicios del proyecto.
-* Establecimiento de los parámetros básicos para que cada módulo se registre automáticamente al iniciar.
+### Alexander Simpertigue (Desarrollador responsable: Jugadores-service)
 
 **Servicio de Jugadores**
 * Creación de las operaciones básicas para gestionar la información de los jugadores en la base de datos.
