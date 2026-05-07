@@ -16,7 +16,7 @@
 * **Optimizacion para XAMPP:** Se actualizo el driver a MariaDB para tener compatibilidad nativa perfecta y evitar errores en las migraciones.
 * **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
   
-** Actualizaciones (Eureka) **
+**Actualizaciones (Eureka)**
 
 * **Fuera lo complejo:** Eliminamos Eureka y el Gateway. Ahora los microservicios se hablan directamente. Esto hace que el sistema sea más rápido de levantar y mucho más fácil de testear en esta etapa.
 * **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" moderno para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
