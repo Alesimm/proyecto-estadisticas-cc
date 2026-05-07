@@ -4,6 +4,7 @@ import com.ccanalytics.jugadores_service.dto.JugadorRequestDTO;
 import com.ccanalytics.jugadores_service.dto.JugadorResponseDTO;
 import com.ccanalytics.jugadores_service.entity.Jugador;
 import com.ccanalytics.jugadores_service.repository.JugadorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,40 +12,46 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JugadorService {
 
     @Autowired
     private JugadorRepository jugadorRepository;
 
-    // lista todos los jugadores
     public List<JugadorResponseDTO> listarTodos() {
+        log.info("Buscando a todos los jugadores del plantel");
         return jugadorRepository.findAll().stream()
                 .map(this::mapearAResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // busca un jugador por su id
     public JugadorResponseDTO buscarPorId(Long id) {
+        log.info("Buscando datos del jugador con ID {}", id);
         Jugador jugador = jugadorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No se encontro ningun jugador con el ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("No tenemos a ningun jugador con el ID: " + id));
         return mapearAResponseDTO(jugador);
     }
 
-    // busca la lista de jugadores que jueguen en x posicion
     public List<JugadorResponseDTO> buscarPorPosicion(String posicion) {
-        List<Jugador> jugadores = jugadorRepository.findByPosicionIgnoreCase(posicion);
-        if (jugadores.isEmpty()) {
-            throw new IllegalArgumentException("No se encontraron jugadores en la posicion: " + posicion);
-        }
-        return jugadores.stream()
+        log.info("Filtrando jugadores por la posicion: {}", posicion);
+        return jugadorRepository.findByPosicionIgnoreCase(posicion).stream()
                 .map(this::mapearAResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // guarda un jugador validando que no se repita la camiseta
     public JugadorResponseDTO guardarJugador(JugadorRequestDTO request) {
+        log.info("Iniciando registro de nuevo jugador: {} {}", request.getNombre(), request.getApellido());
+
+        // Regla de Negocio 1
         if (jugadorRepository.existsByNumeroCamiseta(request.getNumeroCamiseta())) {
-            throw new IllegalArgumentException("El numero de camiseta ya esta ocupado");
+            log.warn("Fallo el registro: el dorsal {} ya esta siendo ocupado", request.getNumeroCamiseta());
+            throw new IllegalArgumentException("Ese numero de camiseta ya lo tiene otro jugador");
+        }
+
+        // Regla de Negocio 2
+        if (jugadorRepository.existsByCorreoContacto(request.getCorreoContacto())) {
+            log.warn("Fallo el registro: el correo {} ya existe", request.getCorreoContacto());
+            throw new IllegalArgumentException("El correo ingresado ya esta registrado en nuestra base de datos");
         }
 
         Jugador jugador = new Jugador();
@@ -52,20 +59,25 @@ public class JugadorService {
         jugador.setApellido(request.getApellido());
         jugador.setPosicion(request.getPosicion());
         jugador.setNumeroCamiseta(request.getNumeroCamiseta());
+        jugador.setNacionalidad(request.getNacionalidad());
+        jugador.setEdad(request.getEdad());
+        jugador.setCorreoContacto(request.getCorreoContacto());
 
         Jugador guardado = jugadorRepository.save(jugador);
+        log.info("Jugador registrado con exito. Se le asigno el ID {}", guardado.getId());
+
         return mapearAResponseDTO(guardado);
     }
 
-    // elimina usando el id
     public void eliminarJugador(Long id) {
         if (!jugadorRepository.existsById(id)) {
-            throw new IllegalArgumentException("El jugador no existe");
+            throw new IllegalArgumentException("No se puede eliminar: el jugador no existe");
         }
         jugadorRepository.deleteById(id);
+        log.info("Jugador con ID {} fue eliminado del sistema", id);
     }
 
-    // pasa de entidad a dto para no mostrar la base de datos directo
+    // pasamos de entidad a dto para no exponer la base de datos directo a la web
     private JugadorResponseDTO mapearAResponseDTO(Jugador jugador) {
         JugadorResponseDTO dto = new JugadorResponseDTO();
         dto.setId(jugador.getId());
@@ -73,6 +85,9 @@ public class JugadorService {
         dto.setApellido(jugador.getApellido());
         dto.setPosicion(jugador.getPosicion());
         dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
+        dto.setNacionalidad(jugador.getNacionalidad());
+        dto.setEdad(jugador.getEdad());
+        dto.setCorreoContacto(jugador.getCorreoContacto());
         return dto;
     }
 }

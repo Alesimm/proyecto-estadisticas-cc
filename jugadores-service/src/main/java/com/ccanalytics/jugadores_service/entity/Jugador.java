@@ -1,17 +1,12 @@
 package com.ccanalytics.jugadores_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "jugadores")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Jugador {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +15,12 @@ public class Jugador {
     private String apellido;
     private String posicion;
 
-    @Column(unique = true) // regla tipo db
+    @Column(name = "numero_camiseta", unique = true)
     private Integer numeroCamiseta;
+
+    private String nacionalidad;
+    private Integer edad;
+
+    @Column(name = "correo_contacto", unique = true)
+    private String correoContacto;
 }
