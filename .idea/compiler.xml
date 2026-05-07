@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="eureka-server" />
         <module name="jugadores-service" />
       </profile>
       <profile name="Annotation profile for partidosservice" enabled="true">
@@ -30,7 +29,7 @@
         </processorPath>
         <module name="formaciones" />
       </profile>
-      <profile name="Annotation profile for jugadores-service" enabled="true">
+      <profile name="Annotation profile for estadisticas-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -40,7 +39,9 @@
         <module name="estadisticas-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21">
+      <module name="eureka-server" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
