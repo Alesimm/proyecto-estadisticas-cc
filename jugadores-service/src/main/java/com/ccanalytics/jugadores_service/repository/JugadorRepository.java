@@ -8,9 +8,10 @@ import java.util.List;
 
 @Repository
 public interface JugadorRepository extends JpaRepository<Jugador, Long> {
-
+    // metodos clave para validar que no se repitan los datos
     boolean existsByNumeroCamiseta(Integer numeroCamiseta);
+    boolean existsByCorreoContacto(String correoContacto);
 
-    // busca por posicion dando igual si lo escriben en mayuscula o minuscula
+    // buscador simple que ignora mayusculas
     List<Jugador> findByPosicionIgnoreCase(String posicion);
 }

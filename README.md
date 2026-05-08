@@ -1,11 +1,7 @@
 ## Seguimiento de tareas por integrante
 ------------------------------------------------------------------
 
-### Alexander Simpertigue (Desarrollador responsable: Eureka-server y Jugadores-service)
-
-**Eureka Server**
-* Configuración del servidor de descubrimiento para permitir la comunicación entre todos los microservicios del proyecto.
-* Establecimiento de los parámetros básicos para que cada módulo se registre automáticamente al iniciar.
+### Alexander Simpertigue (Desarrollador responsable: Jugadores-service)
 
 **Servicio de Jugadores**
 * Creación de las operaciones básicas para gestionar la información de los jugadores en la base de datos.
@@ -19,8 +15,11 @@
 * **Control de Versiones (Flyway):** Se integro Flyway para automatizar la creacion de la tabla y la insercion de los datos iniciales, asegurando que todos tengan la misma estructura de base de datos.
 * **Optimizacion para XAMPP:** Se actualizo el driver a MariaDB para tener compatibilidad nativa perfecta y evitar errores en las migraciones.
 * **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
+  
+**Actualizaciones Eliminacion (Eureka)**
 
-
+* **Principal:** Eliminamos Eureka y el Gateway.
+* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Joseph Rivas

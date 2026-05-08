@@ -9,4 +9,7 @@ public class JugadorResponseDTO {
     private String apellido;
     private String posicion;
     private Integer numeroCamiseta;
+    private String nacionalidad;
+    private Integer edad;
+    private String correoContacto;
 }
