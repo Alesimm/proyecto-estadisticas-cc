@@ -7,29 +7,26 @@ import lombok.Data;
 @Data
 public class EstadisticaRequestDTO {
 
-    @NotNull(message = "El ID del jugador es obligatorio")
-    private Long jugadorId;
+    @NotNull(message = "El idJugador es obligatorio")
+    private Long idJugador;
 
-    @NotNull(message = "El ID del partido es obligatorio")
-    private Long partidoId;
+    @NotNull(message = "Los minutos jugados son obligatorios")
+    @Min(value = 0, message = "El valor no puede ser negativo")
+    private Integer minutosJugados;
 
-    @NotNull(message = "Los goles son obligatorios")
-    @Min(value = 0, message = "Los goles no pueden ser negativos")
-    private Integer goles;
+    @NotNull(message = "Los goles totales son obligatorios")
+    @Min(value = 0, message = "El valor no puede ser negativo")
+    private Integer golesTotales;
 
     @NotNull(message = "Las asistencias son obligatorias")
-    @Min(value = 0, message = "Las asistencias no pueden ser negativas")
+    @Min(value = 0, message = "El valor no puede ser negativo")
     private Integer asistencias;
 
-    @NotNull(message = "Las intercepciones son obligatorias")
-    @Min(value = 0, message = "Las intercepciones no pueden ser negativas")
-    private Integer intercepciones;
-
     @NotNull(message = "Las recuperaciones son obligatorias")
-    @Min(value = 0, message = "Las recuperaciones no pueden ser negativas")
+    @Min(value = 0, message = "El valor no puede ser negativo")
     private Integer recuperaciones;
 
-    @NotNull(message = "Las atajadas son obligatorias")
-    @Min(value = 0, message = "Las atajadas no pueden ser negativas")
-    private Integer atajadas;
+    @NotNull(message = "Los goles recibidos son obligatorios")
+    @Min(value = 0, message = "El valor no puede ser negativo")
+    private Integer golesRecibidos;
 }

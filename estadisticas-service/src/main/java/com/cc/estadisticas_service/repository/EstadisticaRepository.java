@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EstadisticaRepository extends JpaRepository<Estadistica, Long> {
+    boolean existsByIdJugador(Long idJugador);
 }

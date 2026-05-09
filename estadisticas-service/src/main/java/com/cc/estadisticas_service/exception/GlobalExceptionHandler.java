@@ -1,6 +1,5 @@
 package com.cc.estadisticas_service.exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,43 +11,34 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.warn("Error de validación capturado en el JSON de entrada de estadísticas");
+    public ResponseEntity<Map<String, String>> handleValidations(MethodArgumentNotValidException problemita) {
+        log.error("Peticion rechazada por fallos en Bean Validation");
         Map<String, String> errores = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errores.put(fieldName, errorMessage);
-        });
+        for (FieldError error : problemita.getBindingResult().getFieldErrors()) {
+            errores.put(error.getField(), error.getDefaultMessage());
+        }
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleEntityNotFoundException(EntityNotFoundException ex) {
-        log.error("Recurso no encontrado: {}", ex.getMessage());
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        log.error("Error de lógica de negocio: {}", ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleLogicaNegocio(IllegalArgumentException problemita) {
+        log.error("Excepcion de logica de negocio: {}", problemita.getMessage());
         Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        error.put("error", problemita.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGlobalException(Exception ex) {
-        log.error("Error interno del servidor: ", ex);
+    public ResponseEntity<Map<String, String>> handleGenerico(Exception problemita) {
+        log.error("Fallo critico en el servidor: {}", problemita.getMessage());
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Ha ocurrido un error interno en el servidor.");
+        error.put("error", "Ocurrio un error inesperado en el servidor");
+        error.put("detalle", problemita.getMessage());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
