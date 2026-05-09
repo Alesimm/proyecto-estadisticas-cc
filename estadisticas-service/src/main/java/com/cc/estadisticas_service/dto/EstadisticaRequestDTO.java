@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class EstadisticaDTO {
-    private Long id;
+public class EstadisticaRequestDTO {
 
     @NotNull(message = "El ID del jugador es obligatorio")
     private Long jugadorId;
