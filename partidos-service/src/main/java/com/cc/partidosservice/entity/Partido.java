@@ -1,9 +1,14 @@
-package com.cc.partidosservice.dto;
+package com.cc.partidosservice.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-public class PartidoResponseDTO {
+@Entity
+@Table(name = "partido")
+public class Partido {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String rival;
     private String torneo;
