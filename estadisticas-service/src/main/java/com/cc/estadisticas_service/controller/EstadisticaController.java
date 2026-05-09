@@ -4,8 +4,12 @@ import com.cc.estadisticas_service.dto.EstadisticaRequestDTO;
 import com.cc.estadisticas_service.dto.EstadisticaResponseDTO;
 import com.cc.estadisticas_service.service.EstadisticaService;
 import jakarta.validation.Valid;
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> main
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EstadisticaController {
 
-    private final EstadisticaService service;
+    @Autowired
+    private EstadisticaService service;
 
+<<<<<<< HEAD
     @PostMapping
     public ResponseEntity<EstadisticaResponseDTO> crearEstadistica(@Valid @RequestBody EstadisticaRequestDTO requestDTO) {
         EstadisticaResponseDTO nuevaEstadistica = service.guardar(requestDTO);
@@ -28,6 +34,16 @@ public class EstadisticaController {
     public ResponseEntity<List<EstadisticaResponseDTO>> listarEstadisticas() {
         List<EstadisticaResponseDTO> estadisticas = service.listarTodas();
         return new ResponseEntity<>(estadisticas, HttpStatus.OK);
+=======
+    @GetMapping
+    public ResponseEntity<List<EstadisticaResponseDTO>> listar() {
+        return ResponseEntity.ok(service.listarTodas());
+    }
+
+    @PostMapping
+    public ResponseEntity<EstadisticaResponseDTO> guardar(@Valid @RequestBody EstadisticaRequestDTO dto) {
+        return ResponseEntity.ok(service.guardar(dto));
+>>>>>>> main
     }
 
     @GetMapping("/{id}")

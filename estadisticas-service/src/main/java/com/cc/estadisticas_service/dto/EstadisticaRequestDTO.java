@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class EstadisticaRequestDTO {
+<<<<<<< HEAD
 
     @NotNull(message = "El ID del jugador es obligatorio")
     private Long jugadorId;
@@ -32,4 +33,15 @@ public class EstadisticaRequestDTO {
     @NotNull(message = "Las atajadas son obligatorias")
     @Min(value = 0, message = "Las atajadas no pueden ser negativas")
     private Integer atajadas;
+=======
+    @NotNull(message = "El ID del jugador es obligatorio")
+    private Long jugadorId;
+    @NotNull(message = "El ID del partido es obligatorio")
+    private Long partidoId;
+    @Min(0) private Integer goles;
+    @Min(0) private Integer asistencias;
+    @Min(0) private Integer intercepciones;
+    @Min(0) private Integer recuperaciones;
+    @Min(0) private Integer atajadas;
+>>>>>>> main
 }

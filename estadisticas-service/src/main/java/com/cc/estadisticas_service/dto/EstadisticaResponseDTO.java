@@ -14,5 +14,9 @@ public class EstadisticaResponseDTO {
     private Integer intercepciones;
     private Integer recuperaciones;
     private Integer atajadas;
+<<<<<<< HEAD
     private String estado;
+=======
+    private String mensaje;
+>>>>>>> main
 }
