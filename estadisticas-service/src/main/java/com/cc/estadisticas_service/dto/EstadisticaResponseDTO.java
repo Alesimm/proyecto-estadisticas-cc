@@ -7,12 +7,10 @@ import lombok.Data;
 @Builder
 public class EstadisticaResponseDTO {
     private Long id;
-    private Long jugadorId;
-    private Long partidoId;
-    private Integer goles;
+    private Long idJugador;
+    private Integer minutosJugados;
+    private Integer golesTotales;
     private Integer asistencias;
-    private Integer intercepciones;
     private Integer recuperaciones;
-    private Integer atajadas;
-    private String estado;
+    private Integer golesRecibidos;
 }

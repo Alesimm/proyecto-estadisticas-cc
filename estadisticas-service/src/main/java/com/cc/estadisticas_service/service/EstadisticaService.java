@@ -4,105 +4,65 @@ import com.cc.estadisticas_service.dto.EstadisticaRequestDTO;
 import com.cc.estadisticas_service.dto.EstadisticaResponseDTO;
 import com.cc.estadisticas_service.model.Estadistica;
 import com.cc.estadisticas_service.repository.EstadisticaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EstadisticaService {
 
     private final EstadisticaRepository repository;
 
-    public EstadisticaResponseDTO guardar(EstadisticaRequestDTO requestDTO) {
-        log.info("Iniciando guardado de estadísticas para el jugador ID: {}", requestDTO.getJugadorId());
+    @Transactional
+    public EstadisticaResponseDTO crear(EstadisticaRequestDTO dto) {
+        log.info("Iniciando validaciones para registrar estadisticas del jugador id: {}", dto.getIdJugador());
 
-        validarLogicaDeEstadisticas(requestDTO);
+        if (repository.existsByIdJugador(dto.getIdJugador())) {
+            log.error("Rechazado: El jugador id {} ya tiene estadisticas en la base de datos", dto.getIdJugador());
+            throw new IllegalArgumentException("El jugador ya tiene un registro de estadisticas activo");
+        }
 
-        Estadistica entidad = Estadistica.builder()
-                .jugadorId(requestDTO.getJugadorId())
-                .partidoId(requestDTO.getPartidoId())
-                .goles(requestDTO.getGoles())
-                .asistencias(requestDTO.getAsistencias())
-                .intercepciones(requestDTO.getIntercepciones())
-                .recuperaciones(requestDTO.getRecuperaciones())
-                .atajadas(requestDTO.getAtajadas())
+        if (dto.getMinutosJugados() == 0 && (dto.getGolesTotales() > 0 || dto.getAsistencias() > 0 || dto.getRecuperaciones() > 0)) {
+            log.error("Rechazado: Inconsistencia de datos. Minutos jugados es 0 pero registra acciones en cancha");
+            throw new IllegalArgumentException("Los minutos jugados no pueden ser 0 si el jugador tiene goles, asistencias o recuperaciones");
+        }
+
+        Estadistica estadistica = Estadistica.builder()
+                .idJugador(dto.getIdJugador())
+                .minutosJugados(dto.getMinutosJugados())
+                .golesTotales(dto.getGolesTotales())
+                .asistencias(dto.getAsistencias())
+                .recuperaciones(dto.getRecuperaciones())
+                .golesRecibidos(dto.getGolesRecibidos())
                 .build();
 
-        Estadistica guardada = repository.save(entidad);
-        log.info("Estadística guardada exitosamente en BD con ID: {}", guardada.getId());
+        Estadistica guardada = repository.save(estadistica);
+        log.info("Estadisticas creadas con exito. Nuevo ID asignado: {}", guardada.getId());
 
-        return mapearAResponseDTO(guardada, "Estadísticas registradas con éxito");
+        return mapearResponse(guardada);
     }
 
-    public List<EstadisticaResponseDTO> listarTodas() {
-        log.info("Consultando todas las estadísticas en la base de datos");
-        return repository.findAll().stream()
-                .map(entidad -> mapearAResponseDTO(entidad, "OK"))
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<EstadisticaResponseDTO> listar() {
+        log.info("Consultando el listado completo de estadisticas");
+        return repository.findAll().stream().map(this::mapearResponse).collect(Collectors.toList());
     }
 
-    public EstadisticaResponseDTO obtenerPorId(Long id) {
-        log.info("Buscando estadística con ID: {}", id);
-        Estadistica entidad = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontraron estadísticas con el ID: " + id));
-        return mapearAResponseDTO(entidad, "OK");
-    }
-
-    public EstadisticaResponseDTO actualizar(Long id, EstadisticaRequestDTO requestDTO) {
-        log.info("Actualizando estadística con ID: {}", id);
-        validarLogicaDeEstadisticas(requestDTO);
-
-        Estadistica entidadExistente = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontraron estadísticas con el ID: " + id + " para actualizar"));
-
-        entidadExistente.setJugadorId(requestDTO.getJugadorId());
-        entidadExistente.setPartidoId(requestDTO.getPartidoId());
-        entidadExistente.setGoles(requestDTO.getGoles());
-        entidadExistente.setAsistencias(requestDTO.getAsistencias());
-        entidadExistente.setIntercepciones(requestDTO.getIntercepciones());
-        entidadExistente.setRecuperaciones(requestDTO.getRecuperaciones());
-        entidadExistente.setAtajadas(requestDTO.getAtajadas());
-
-        Estadistica actualizada = repository.save(entidadExistente);
-        log.info("Estadística ID {} actualizada correctamente", id);
-
-        return mapearAResponseDTO(actualizada, "Estadísticas actualizadas con éxito");
-    }
-
-    public void eliminar(Long id) {
-        log.warn("Solicitud para eliminar la estadística con ID: {}", id);
-        Estadistica entidad = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se puede eliminar. Estadística no encontrada con ID: " + id));
-
-        repository.delete(entidad);
-        log.info("Estadística ID {} eliminada exitosamente", id);
-    }
-
-    // Regla de negocio de validación
-    private void validarLogicaDeEstadisticas(EstadisticaRequestDTO dto) {
-        if (dto.getGoles() > 50) {
-            log.error("Cantidad de goles irreal intentada: {}", dto.getGoles());
-            throw new IllegalArgumentException("La cantidad de goles es irreal para un solo jugador en un partido.");
-        }
-    }
-
-    private EstadisticaResponseDTO mapearAResponseDTO(Estadistica entidad, String estado) {
+    private EstadisticaResponseDTO mapearResponse(Estadistica model) {
         return EstadisticaResponseDTO.builder()
-                .id(entidad.getId())
-                .jugadorId(entidad.getJugadorId())
-                .partidoId(entidad.getPartidoId())
-                .goles(entidad.getGoles())
-                .asistencias(entidad.getAsistencias())
-                .intercepciones(entidad.getIntercepciones())
-                .recuperaciones(entidad.getRecuperaciones())
-                .atajadas(entidad.getAtajadas())
-                .estado(estado)
+                .id(model.getId())
+                .idJugador(model.getIdJugador())
+                .minutosJugados(model.getMinutosJugados())
+                .golesTotales(model.getGolesTotales())
+                .asistencias(model.getAsistencias())
+                .recuperaciones(model.getRecuperaciones())
+                .golesRecibidos(model.getGolesRecibidos())
                 .build();
     }
 }

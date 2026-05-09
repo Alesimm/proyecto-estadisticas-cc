@@ -19,34 +19,12 @@ public class EstadisticaController {
     private final EstadisticaService service;
 
     @PostMapping
-    public ResponseEntity<EstadisticaResponseDTO> crearEstadistica(@Valid @RequestBody EstadisticaRequestDTO requestDTO) {
-        EstadisticaResponseDTO nuevaEstadistica = service.guardar(requestDTO);
-        return new ResponseEntity<>(nuevaEstadistica, HttpStatus.CREATED);
+    public ResponseEntity<EstadisticaResponseDTO> crearEstadistica(@Valid @RequestBody EstadisticaRequestDTO request) {
+        return new ResponseEntity<>(service.crear(request), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<EstadisticaResponseDTO>> listarEstadisticas() {
-        List<EstadisticaResponseDTO> estadisticas = service.listarTodas();
-        return new ResponseEntity<>(estadisticas, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EstadisticaResponseDTO> obtenerEstadisticaPorId(@PathVariable Long id) {
-        EstadisticaResponseDTO response = service.obtenerPorId(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<EstadisticaResponseDTO> actualizarEstadistica(
-            @PathVariable Long id,
-            @Valid @RequestBody EstadisticaRequestDTO requestDTO) {
-        EstadisticaResponseDTO response = service.actualizar(id, requestDTO);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEstadistica(@PathVariable Long id) {
-        service.eliminar(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(service.listar());
     }
 }
