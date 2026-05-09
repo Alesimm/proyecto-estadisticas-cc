@@ -7,9 +7,10 @@ import lombok.Data;
 @Builder
 public class FormacionResponseDTO {
     private Long id;
-    private Long partidoId;
-    private Long equipoId;
     private String esquemaTactico;
-    private String directorTecnico;
+    private String estiloJuego;
+    private String mentalidad;
+    private Integer presion;
+    private Integer lineaDefensiva;
     private String estado;
 }

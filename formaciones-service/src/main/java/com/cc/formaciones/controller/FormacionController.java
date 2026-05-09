@@ -16,37 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FormacionController {
 
-    private final FormacionService formacionService;
+    private final FormacionService service;
 
     @PostMapping
-    public ResponseEntity<FormacionResponseDTO> crearFormacion(@Valid @RequestBody FormacionRequestDTO requestDTO) {
-        FormacionResponseDTO response = formacionService.registrarFormacion(requestDTO);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<FormacionResponseDTO> crearFormacion(@Valid @RequestBody FormacionRequestDTO request) {
+        return new ResponseEntity<>(service.crear(request), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<FormacionResponseDTO>> listarFormaciones() {
-        List<FormacionResponseDTO> formaciones = formacionService.obtenerTodas();
-        return new ResponseEntity<>(formaciones, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FormacionResponseDTO> obtenerFormacionPorId(@PathVariable Long id) {
-        FormacionResponseDTO response = formacionService.obtenerPorId(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<FormacionResponseDTO> actualizarFormacion(
-            @PathVariable Long id,
-            @Valid @RequestBody FormacionRequestDTO requestDTO) {
-        FormacionResponseDTO response = formacionService.actualizarFormacion(id, requestDTO);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarFormacion(@PathVariable Long id) {
-        formacionService.eliminarFormacion(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(service.listar());
     }
 }

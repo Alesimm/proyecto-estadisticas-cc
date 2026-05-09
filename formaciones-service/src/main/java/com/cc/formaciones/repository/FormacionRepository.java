@@ -1,6 +1,6 @@
 package com.cc.formaciones.repository;
 
-import com.cc.formaciones.entity.Formacion;
+import com.cc.formaciones.model.Formacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

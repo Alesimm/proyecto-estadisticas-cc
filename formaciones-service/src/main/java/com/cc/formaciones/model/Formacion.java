@@ -1,7 +1,10 @@
-package com.cc.formaciones.entity;
+package com.cc.formaciones.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "formaciones")
@@ -10,20 +13,25 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Formacion {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "partido_id", nullable = false)
-    private Long partidoId;
-
-    @Column(name = "equipo_id", nullable = false)
-    private Long equipoId;
-
-    @Column(name = "esquema_tactico", nullable = false, length = 15)
+    @Column(name = "esquema_tactico", nullable = false)
     private String esquemaTactico;
 
-    @Column(name = "director_tecnico", nullable = false, length = 100)
-    private String directorTecnico;
+    @Column(name = "estilo_juego", nullable = false)
+    private String estiloJuego;
+
+    @Column(nullable = false)
+    private String mentalidad;
+
+    @Column(nullable = false)
+    private Integer presion;
+
+    @Column(name = "linea_defensiva", nullable = false)
+    private Integer lineaDefensiva;
+
+    @Column(nullable = false)
+    private String estado;
 }
