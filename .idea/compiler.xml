@@ -9,6 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="estadisticas-service" />
         <module name="formaciones" />
+        <module name="formaciones-service" />
+        <module name="jugadores-service" />
+        <module name="partidosservice" />
       </profile>
     </annotationProcessing>
   </component>
@@ -16,6 +19,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="estadisticas-service" options="-parameters" />
       <module name="formaciones" options="-parameters" />
+      <module name="formaciones-service" options="-parameters" />
       <module name="jugadores-service" options="-parameters" />
       <module name="partidosservice" options="-parameters" />
     </option>
