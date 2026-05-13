@@ -5,5 +5,5 @@ CREATE TABLE jugadores (
     posicion VARCHAR(50) NOT NULL,
     numero_camiseta INT NOT NULL UNIQUE,
     nacionalidad VARCHAR(50) NOT NULL,
-    edad INT NOT NULL,
+    edad INT NOT NULL
 );
