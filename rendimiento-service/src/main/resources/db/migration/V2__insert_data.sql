@@ -1,0 +1,1 @@
+-- V2 vacio: Los rendimientos se calculan en tiempo real consumiendo otras APIs

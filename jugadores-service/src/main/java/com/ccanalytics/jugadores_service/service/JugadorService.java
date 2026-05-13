@@ -48,12 +48,6 @@ public class JugadorService {
             throw new IllegalArgumentException("Ese numero de camiseta ya lo tiene otro jugador");
         }
 
-        // Regla de Negocio 2
-        if (jugadorRepository.existsByCorreoContacto(request.getCorreoContacto())) {
-            log.warn("Fallo el registro: el correo {} ya existe", request.getCorreoContacto());
-            throw new IllegalArgumentException("El correo ingresado ya esta registrado en nuestra base de datos");
-        }
-
         Jugador jugador = new Jugador();
         jugador.setNombre(request.getNombre());
         jugador.setApellido(request.getApellido());
@@ -61,7 +55,6 @@ public class JugadorService {
         jugador.setNumeroCamiseta(request.getNumeroCamiseta());
         jugador.setNacionalidad(request.getNacionalidad());
         jugador.setEdad(request.getEdad());
-        jugador.setCorreoContacto(request.getCorreoContacto());
 
         Jugador guardado = jugadorRepository.save(jugador);
         log.info("Jugador registrado con exito. Se le asigno el ID {}", guardado.getId());
@@ -87,7 +80,6 @@ public class JugadorService {
         dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
         dto.setNacionalidad(jugador.getNacionalidad());
         dto.setEdad(jugador.getEdad());
-        dto.setCorreoContacto(jugador.getCorreoContacto());
         return dto;
     }
 }
