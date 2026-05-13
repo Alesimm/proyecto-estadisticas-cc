@@ -30,8 +30,4 @@ public class JugadorRequestDTO {
     @NotNull(message = "La edad es obligatoria")
     @Min(value = 15, message = "El jugador debe tener al menos 15 anios")
     private Integer edad;
-
-    @NotBlank(message = "El correo de contacto es obligatorio")
-    @Email(message = "Debes ingresar un correo valido")
-    private String correoContacto;
 }

@@ -6,5 +6,4 @@ CREATE TABLE jugadores (
     numero_camiseta INT NOT NULL UNIQUE,
     nacionalidad VARCHAR(50) NOT NULL,
     edad INT NOT NULL,
-    correo_contacto VARCHAR(150) NOT NULL UNIQUE
 );

@@ -20,7 +20,4 @@ public class Jugador {
 
     private String nacionalidad;
     private Integer edad;
-
-    @Column(name = "correo_contacto", unique = true)
-    private String correoContacto;
 }
