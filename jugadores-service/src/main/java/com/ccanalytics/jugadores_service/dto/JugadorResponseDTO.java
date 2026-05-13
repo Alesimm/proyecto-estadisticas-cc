@@ -11,5 +11,4 @@ public class JugadorResponseDTO {
     private Integer numeroCamiseta;
     private String nacionalidad;
     private Integer edad;
-    private String correoContacto;
 }
