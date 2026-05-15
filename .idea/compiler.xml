@@ -11,11 +11,13 @@
         <module name="reportes-service" />
         <module name="recomendaciones-service" />
         <module name="lesiones-service" />
+        <module name="auth-service" />
         <module name="rendimiento_service" />
         <module name="jugadores-service" />
         <module name="partidosservice" />
         <module name="estadisticas-service" />
         <module name="formaciones" />
+        <module name="usuarios-service" />
         <module name="usuarios_service" />
         <module name="formaciones-service" />
       </profile>
@@ -23,6 +25,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service" options="-parameters" />
       <module name="estadisticas-service" options="-parameters" />
       <module name="formaciones" options="-parameters" />
       <module name="formaciones-service" options="-parameters" />
@@ -33,6 +36,7 @@
       <module name="rendimiento-service" options="-parameters" />
       <module name="rendimiento_service" options="-parameters" />
       <module name="reportes-service" options="-parameters" />
+      <module name="usuarios-service" options="-parameters" />
       <module name="usuarios_service" options="-parameters" />
     </option>
   </component>

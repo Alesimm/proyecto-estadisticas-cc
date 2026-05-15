@@ -123,6 +123,7 @@ public class UsuarioService {
         dto.setNombre(usuario.getNombre());
         dto.setApellido(usuario.getApellido());
         dto.setCorreo(usuario.getCorreo());
+        dto.setPassword(usuario.getPassword()); // <-- AGREGAMOS ESTO
         dto.setRol(usuario.getRol());
         dto.setEstado(usuario.getEstado());
         return dto;
