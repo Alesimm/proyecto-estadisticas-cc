@@ -20,6 +20,11 @@
 
 * **Principal:** Eliminamos Eureka y el Gateway.
 * **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
+
+**Nuevos Avances (Rendimiento-service, auth-service y Arreglos)**
+* **Capa Analítica de Rendimiento:** Se integró el servicio de rendimiento para evaluar el nivel real de cada futbolista, conectando los goles, asistencias y minutos jugados directamente con sus datos personales.
+* **Seguridad y Control de Acceso (Auth):** Se implementó el servicio de autenticación para proteger el sistema, permitiendo crear sesiones seguras y validar de forma interna las credenciales de los usuarios que entran a la plataforma.
+* **Solución de Errores y Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, limpiando los archivos de configuración de base de datos para asegurar que todo el equipo trabaje sobre la versión correcta en GitHub.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Joseph Rivas
