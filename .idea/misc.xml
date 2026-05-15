@@ -12,6 +12,8 @@
         <option value="$PROJECT_DIR$/estadisticas-service/pom.xml" />
         <option value="$PROJECT_DIR$/lesiones-service/pom.xml" />
         <option value="$PROJECT_DIR$/rendimiento-service/pom.xml" />
+        <option value="$PROJECT_DIR$/reportes-service/reportes-service/pom.xml" />
+        <option value="$PROJECT_DIR$/reportes-service/pom.xml" />
         <option value="$PROJECT_DIR$/usuarios-service/pom.xml" />
       </list>
     </option>

@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="rendimiento-service" />
+        <module name="reportes-service" />
         <module name="lesiones-service" />
         <module name="rendimiento_service" />
         <module name="jugadores-service" />
@@ -29,6 +30,7 @@
       <module name="partidosservice" options="-parameters" />
       <module name="rendimiento-service" options="-parameters" />
       <module name="rendimiento_service" options="-parameters" />
+      <module name="reportes-service" options="-parameters" />
       <module name="usuarios_service" options="-parameters" />
     </option>
   </component>
