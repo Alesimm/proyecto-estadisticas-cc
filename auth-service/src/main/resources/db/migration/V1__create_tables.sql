@@ -1,0 +1,9 @@
+CREATE TABLE sesiones (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario BIGINT NOT NULL,
+    correo VARCHAR(150) NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    rol VARCHAR(20) NOT NULL,
+    fecha_creacion VARCHAR(50) NOT NULL,
+    estado VARCHAR(20) NOT NULL
+);

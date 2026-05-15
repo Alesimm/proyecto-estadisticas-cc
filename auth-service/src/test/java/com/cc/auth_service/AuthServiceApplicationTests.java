@@ -1,10 +1,10 @@
-package com.cc.formaciones;
+package com.cc.auth_service;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FormacionesApplicationTests {
+class AuthServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
