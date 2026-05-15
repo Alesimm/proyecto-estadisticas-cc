@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rendimiento-service" />
         <module name="reportes-service" />
+        <module name="recomendaciones-service" />
         <module name="lesiones-service" />
         <module name="rendimiento_service" />
         <module name="jugadores-service" />
@@ -28,6 +29,7 @@
       <module name="jugadores-service" options="-parameters" />
       <module name="lesiones-service" options="-parameters" />
       <module name="partidosservice" options="-parameters" />
+      <module name="recomendaciones-service" options="-parameters" />
       <module name="rendimiento-service" options="-parameters" />
       <module name="rendimiento_service" options="-parameters" />
       <module name="reportes-service" options="-parameters" />
