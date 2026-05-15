@@ -15,6 +15,7 @@
         <module name="partidosservice" />
         <module name="estadisticas-service" />
         <module name="formaciones" />
+        <module name="usuarios_service" />
         <module name="formaciones-service" />
       </profile>
     </annotationProcessing>
@@ -30,6 +31,7 @@
       <module name="rendimiento-service" options="-parameters" />
       <module name="rendimiento_service" options="-parameters" />
       <module name="reportes-service" options="-parameters" />
+      <module name="usuarios_service" options="-parameters" />
     </option>
   </component>
 </project>
