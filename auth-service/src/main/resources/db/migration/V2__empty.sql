@@ -1,0 +1,1 @@
+-- V2 vacio: Las sesiones nacen vivas cuando un usuario hace login exitoso

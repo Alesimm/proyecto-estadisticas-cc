@@ -11,6 +11,7 @@ public class UsuarioResponseDTO {
     private String nombre;
     private String apellido;
     private String correo;
+    private String password; // <-- AGREGAMOS ESTO
     private String rol;
     private String estado;
 }
