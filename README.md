@@ -1,7 +1,7 @@
 ## Seguimiento de tareas por integrante
 ------------------------------------------------------------------
 
-### Alexander Simpertigue (Desarrollador responsable: Jugadores-service)
+### Alexander Simpertigue (Desarrollador responsable: Jugadores-service, Rendimiento-service y Auth-service)
 
 **Servicio de Jugadores**
 * Creación de las operaciones básicas para gestionar la información de los jugadores en la base de datos.
