@@ -10,7 +10,6 @@ import com.cc.recomendaciones_service.repository.RecomendacionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 
 @Service
@@ -18,70 +17,31 @@ import java.util.Map;
 public class RecomendacionService {
 
     @Autowired
-    private RecomendacionRepository recomendacionRepository;
-
-    @Autowired
     private JugadorClient jugadorClient;
-
-    @Autowired
-    private RendimientoClient rendimientoClient;
-
     @Autowired
     private EstadisticaClient estadisticaClient;
+    @Autowired
+    private RendimientoClient rendimientoClient;
+    @Autowired
+    private RecomendacionRepository repository;
 
-    public RecomendacionResponseDTO analizarJugador(RecomendacionRequestDTO request) {
-        Long idJugador = request.getIdJugador();
-        log.info("Iniciando analisis de recomendacion para el jugador ID: {}", idJugador);
+    public RecomendacionResponseDTO generarAnalisis(RecomendacionRequestDTO request) {
+        Long id = request.getIdJugador();
+        log.info("Iniciando analisis tactico para el jugador ID: {}", id);
 
-        Map<String, Object> jugadorMap;
-        Map<String, Object> rendimientoMap;
-        Map<String, Object> estadisticaMap;
 
-        // 1. Blindaje y llamada a Jugadores (8081)
-        try {
-            jugadorMap = jugadorClient.obtenerJugador(idJugador);
-            if (jugadorMap == null) {
-                log.error("No se encontro el jugador con ID: {}", idJugador);
-                throw new IllegalArgumentException("Error de negocio: Jugador no encontrado en el sistema base");
-            }
-        } catch (IllegalArgumentException e) {
-            throw e; // Relanza nuestro error controlado
-        } catch (Exception e) {
-            log.error("Conexion rechazada con Jugadores-Service");
-            throw new IllegalArgumentException("Error de negocio: El servicio de Jugadores esta apagado o inalcanzable");
-        }
+        Map<String, Object> jugador = jugadorClient.obtenerJugador(id);
+        Map<String, Object> estadisticas = estadisticaClient.obtenerEstadisticas(id);
+        Map<String, Object> rendimiento = rendimientoClient.obtenerNota(id);
 
-        // 2. Blindaje y llamada a Rendimiento (8087)
-        try {
-            rendimientoMap = rendimientoClient.obtenerRendimiento(idJugador);
-        } catch (Exception e) {
-            log.error("Conexion rechazada con Rendimiento-Service");
-            throw new IllegalArgumentException("Error de negocio: El servicio de Rendimiento esta apagado o inalcanzable");
-        }
+        String nombreCompleto = jugador.get("nombre").toString() + " " + jugador.get("apellido").toString();
+        Integer minutos = Integer.parseInt(estadisticas.get("minutosJugados").toString());
+        Double nota = Double.parseDouble(rendimiento.get("notaFinal").toString());
 
-        // 3. Blindaje y llamada a Estadisticas (8083)
-        try {
-            estadisticaMap = estadisticaClient.obtenerEstadistica(idJugador);
-        } catch (Exception e) {
-            log.error("Conexion rechazada con Estadisticas-Service");
-            throw new IllegalArgumentException("Error de negocio: El servicio de Estadisticas esta apagado o inalcanzable");
-        }
 
-        // 4. Extraccion de datos adaptada a los nombres exactos de tu Base de Datos
-        String nombre = jugadorMap.get("nombre") != null ? jugadorMap.get("nombre").toString() : "Desconocido";
+        String sugerencia = "Mantener rotacion normal";
+        String prioridad = "BAJA";
 
-        Object objNota = rendimientoMap != null && rendimientoMap.get("nota_final") != null
-                ? rendimientoMap.get("nota_final") : (rendimientoMap != null ? rendimientoMap.get("notaFinal") : null);
-        Double nota = objNota != null ? Double.parseDouble(objNota.toString()) : 0.0;
-
-        Object objMinutos = estadisticaMap != null && estadisticaMap.get("minutos_jugados") != null
-                ? estadisticaMap.get("minutos_jugados") : (estadisticaMap != null ? estadisticaMap.get("minutosJugados") : null);
-        Integer minutos = objMinutos != null ? Integer.parseInt(objMinutos.toString()) : 0;
-
-        String sugerencia;
-        String prioridad;
-
-        // 5. Algoritmo Tactico
         if (nota > 6.0 && minutos < 1500) {
             sugerencia = "Alinear como Titular Indiscutido";
             prioridad = "ALTA";
@@ -91,35 +51,28 @@ public class RecomendacionService {
         } else if (minutos > 2000) {
             sugerencia = "Dar descanso por fatiga muscular";
             prioridad = "ALTA";
-        } else {
-            sugerencia = "Mantener rotacion normal";
-            prioridad = "BAJA";
         }
 
-        log.info("Algoritmo finalizado. Sugerencia: {} | Prioridad: {}", sugerencia, prioridad);
+       // guardar en Base de Datos si existe lo actualiza
+        Recomendacion rec = repository.findByIdJugador(id).orElse(new Recomendacion());
+        rec.setIdJugador(id);
+        rec.setNombreJugador(nombreCompleto);
+        rec.setNotaRendimiento(nota);
+        rec.setMinutosAcumulados(minutos);
+        rec.setSugerenciaTactica(sugerencia);
+        rec.setPrioridad(prioridad);
 
-        // 6. Guardar en Base de Datos (Sobrescribe si ya existe una recomendacion para ese jugador)
-        Recomendacion recomendacion = recomendacionRepository.findByIdJugador(idJugador).orElse(new Recomendacion());
-        recomendacion.setIdJugador(idJugador);
-        recomendacion.setNombreJugador(nombre);
-        recomendacion.setNotaRendimiento(nota);
-        recomendacion.setMinutosAcumulados(minutos);
-        recomendacion.setSugerenciaTactica(sugerencia);
-        recomendacion.setPrioridad(prioridad);
+        Recomendacion guardado = repository.save(rec);
+        log.info("Analisis finalizado exitosamente para: {}", nombreCompleto);
 
-        Recomendacion guardada = recomendacionRepository.save(recomendacion);
-        return mapearADTO(guardada);
-    }
+        RecomendacionResponseDTO res = new RecomendacionResponseDTO();
+        res.setIdJugador(guardado.getIdJugador());
+        res.setNombreJugador(guardado.getNombreJugador());
+        res.setNotaRendimiento(guardado.getNotaRendimiento());
+        res.setMinutosAcumulados(guardado.getMinutosAcumulados());
+        res.setSugerenciaTactica(guardado.getSugerenciaTactica());
+        res.setPrioridad(guardado.getPrioridad());
 
-    private RecomendacionResponseDTO mapearADTO(Recomendacion recomendacion) {
-        RecomendacionResponseDTO dto = new RecomendacionResponseDTO();
-        dto.setId(recomendacion.getId());
-        dto.setIdJugador(recomendacion.getIdJugador());
-        dto.setNombreJugador(recomendacion.getNombreJugador());
-        dto.setNotaRendimiento(recomendacion.getNotaRendimiento());
-        dto.setMinutosAcumulados(recomendacion.getMinutosAcumulados());
-        dto.setSugerenciaTactica(recomendacion.getSugerenciaTactica());
-        dto.setPrioridad(recomendacion.getPrioridad());
-        return dto;
+        return res;
     }
 }

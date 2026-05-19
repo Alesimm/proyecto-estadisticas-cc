@@ -1,12 +1,10 @@
 package com.cc.recomendaciones_service.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class RecomendacionRequestDTO {
-    @NotNull(message = "El idJugador es obligatorio")
+    @NotNull(message = "El idJugador es obligatorio para analizarlo")
     private Long idJugador;
 }
