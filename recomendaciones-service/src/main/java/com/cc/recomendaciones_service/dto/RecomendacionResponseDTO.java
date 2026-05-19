@@ -1,12 +1,9 @@
 package com.cc.recomendaciones_service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class RecomendacionResponseDTO {
-    private Long id;
     private Long idJugador;
     private String nombreJugador;
     private Double notaRendimiento;

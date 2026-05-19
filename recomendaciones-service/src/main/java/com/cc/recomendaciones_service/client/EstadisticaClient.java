@@ -1,33 +1,27 @@
 package com.cc.recomendaciones_service.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class EstadisticaClient {
     @Autowired
-    private WebClient webClient;
+    private WebClient.Builder webClientBuilder;
 
-    @Value("${api.estadisticas.url}")
-    private String url;
+    public Map<String, Object> obtenerEstadisticas(Long idJugador) {
+        List<Map<String, Object>> lista = webClientBuilder.build().get()
+                .uri("http://localhost:8083/api/estadisticas")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .block();
 
-    public Map<String, Object> obtenerEstadistica(Long idJugador) {
-        try {
-            List<Map> response = webClient.get().uri(url).retrieve().bodyToMono(List.class).block();
-            if (response == null) return null;
-            return response.stream()
-                    .filter(m -> {
-                        Object idVal = m.get("id_jugador") != null ? m.get("id_jugador") : (m.get("idJugador") != null ? m.get("idJugador") : m.get("id"));
-                        return idVal != null && idVal.toString().equals(idJugador.toString());
-                    })
-                    .findFirst().orElse(null);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error de negocio: El microservicio de Estadisticas (8083) esta apagado o fallo: " + e.getMessage());
-        }
+        return lista.stream()
+                .filter(e -> e.get("idJugador").toString().equals(idJugador.toString()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("El jugador no tiene estadisticas registradas"));
     }
 }

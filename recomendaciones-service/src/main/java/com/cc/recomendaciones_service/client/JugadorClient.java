@@ -1,30 +1,27 @@
 package com.cc.recomendaciones_service.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class JugadorClient {
     @Autowired
-    private WebClient webClient;
+    private WebClient.Builder webClientBuilder;
 
-    @Value("${api.jugadores.url}")
-    private String url;
+    public Map<String, Object> obtenerJugador(Long id) {
+        List<Map<String, Object>> lista = webClientBuilder.build().get()
+                .uri("http://localhost:8081/api/jugadores")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .block();
 
-    public Map<String, Object> obtenerJugador(Long idJugador) {
-        try {
-            List<Map> response = webClient.get().uri(url).retrieve().bodyToMono(List.class).block();
-            if (response == null) return null;
-            return response.stream()
-                    .filter(m -> m.get("id") != null && m.get("id").toString().equals(idJugador.toString()))
-                    .findFirst().orElse(null);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error de negocio: El microservicio de Jugadores (8081) esta apagado o fallo: " + e.getMessage());
-        }
+        return lista.stream()
+                .filter(j -> j.get("id").toString().equals(id.toString()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Jugador no encontrado en el sistema"));
     }
 }
