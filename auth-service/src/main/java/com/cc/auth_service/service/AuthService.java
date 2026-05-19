@@ -37,9 +37,8 @@ public class AuthService {
         }
 
         // 3. Validar Contrasena REAL
-        Object passwordObj = usuarioData.get("password");
-        if (passwordObj == null || !passwordObj.toString().equals(request.getPassword())) {
-            log.warn("Login rechazado: Contrasena incorrecta para {}", request.getCorreo());
+        Object passwordObj = usuarioData.get("contrasena");
+        if (passwordObj == null || !passwordObj.toString().equals(request.getContrasena())) {
             throw new IllegalArgumentException("Credenciales invalidas (Contrasena incorrecta).");
         }
 
