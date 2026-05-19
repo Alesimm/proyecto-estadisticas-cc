@@ -7,18 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="rendimiento-service" />
         <module name="reportes-service" />
+        <module name="rendimiento_service" />
+        <module name="formaciones" />
+        <module name="usuarios_service" />
+        <module name="rendimiento-service" />
         <module name="recomendaciones-service" />
         <module name="lesiones-service" />
         <module name="auth-service" />
-        <module name="rendimiento_service" />
         <module name="jugadores-service" />
         <module name="partidosservice" />
         <module name="estadisticas-service" />
-        <module name="formaciones" />
         <module name="usuarios-service" />
-        <module name="usuarios_service" />
         <module name="formaciones-service" />
       </profile>
     </annotationProcessing>

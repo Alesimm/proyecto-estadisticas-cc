@@ -9,5 +9,5 @@ public class AuthRequestDTO {
     private String correo;
 
     @NotBlank(message = "La contraseña es obligatoria")
-    private String password;
+    private String contrasena;
 }
