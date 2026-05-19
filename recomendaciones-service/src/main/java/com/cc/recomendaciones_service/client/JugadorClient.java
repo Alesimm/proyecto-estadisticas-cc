@@ -14,7 +14,7 @@ public class JugadorClient {
 
     public Map<String, Object> obtenerJugador(Long id) {
         List<Map<String, Object>> lista = webClientBuilder.build().get()
-                .uri("http://localhost:8081/api/jugadores")
+                .uri("http://localhost:8093/api/jugadores")
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
                 .block();
