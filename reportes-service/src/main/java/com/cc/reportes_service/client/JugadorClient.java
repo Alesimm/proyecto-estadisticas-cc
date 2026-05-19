@@ -14,7 +14,7 @@ public class JugadorClient {
     public Integer obtenerTotalJugadores() {
         List<Map> jugadores = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8081/api/jugadores")
+                .uri("http://localhost:8093/api/jugadores")
                 .retrieve()
                 .bodyToFlux(Map.class)
                 .collectList()
