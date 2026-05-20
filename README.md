@@ -34,9 +34,31 @@
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
-### Cristobal Moya
+**Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)**
 
+**Servicio de Formaciones**
+* Creación de las operaciones básicas para gestionar las alineaciones tácticas del equipo en la base de datos.
+* Implementación de objetos de transferencia de datos (DTO) para proteger la estructura interna de la base de datos.
+* Reorganización del código en tres capas independientes (Controlador, Servicio y Repositorio) para mejorar el mantenimiento.
+* **Control de Versiones (Flyway):** Se integró Flyway para automatizar la creación de las tablas y asegurar la estructura táctica inicial.
 
+**Servicio de Estadísticas**
+* Creación de las operaciones básicas para registrar y consultar las métricas de juego (goles, recuperaciones, minutos).
+* Configuración de reglas automáticas para validar que los datos recibidos sean correctos.
+* Desarrollo de un sistema centralizado para capturar fallos y entregar mensajes de error claros al usuario.
+* **Optimización para MariaDB:** Se ajustaron los parámetros de conexión nativa para evitar bloqueos y limpiar los ruidos del servidor en la consola.
 
+**Servicio de Lesiones**
+* Creación de las operaciones básicas para gestionar el estado médico y los tiempos de recuperación del plantel.
+* Creación de una lógica en el servidor para evitar errores de negocio y mantener la coherencia sobre qué jugadores están disponibles.
+* **CRUD Completo:** Se agregaron funciones de búsqueda específicas para tener el microservicio 100% operativo y listo para su consumo.
+
+**Servicio de Reportes (Orquestación y WebClient)**
+* **Orquestación Centralizada:** Creación del servicio que actúa como un "agregador", consolidando la información de múltiples puertos en un solo documento final.
+* **Conexión Inteligente con WebClient:** Ahora usamos un "cliente web" avanzado. El sistema viaja automáticamente para listar a los jugadores, cruza los datos con los lesionados y calcula matemáticamente el rendimiento.
+* **Resiliencia y Tolerancia a Fallos:** Se implementó un mecanismo de protección para asegurar que el sistema de reportes no colapse si un microservicio externo falla, permitiendo generar informes estables siempre.
+
+**Solución de Errores y Git**
+* **Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, aislando los archivos de entorno local para asegurar que el repositorio quede limpio y profesional en GitHub.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
