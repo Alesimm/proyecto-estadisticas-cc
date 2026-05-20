@@ -17,7 +17,6 @@
 * **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
   
 **Actualizaciones Eliminacion (Eureka)**
-
 * **Principal:** Eliminamos Eureka y el Gateway.
 * **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
 
@@ -27,14 +26,7 @@
 * **Solución de Errores y Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, limpiando los archivos de configuración de base de datos para asegurar que todo el equipo trabaje sobre la versión correcta en GitHub.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
-### Joseph Rivas
-
-
-
-
----------------------------------------------------------------------------------------------------------------------------------------------
-
-**Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)**
+### Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)**
 
 **Servicio de Formaciones**
 * Creación de las operaciones básicas para gestionar las alineaciones tácticas del equipo en la base de datos.
@@ -61,4 +53,6 @@
 **Solución de Errores y Git**
 * **Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, aislando los archivos de entorno local para asegurar que el repositorio quede limpio y profesional en GitHub.
 ---------------------------------------------------------------------------------------------------------------------------------------------
+
+### Joseph Rivas
 
