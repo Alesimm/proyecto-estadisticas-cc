@@ -13,13 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reporte {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String autorReporte;
     private String tipoReporte;
     private String fechaGeneracion;
     private Integer totalPlantel;
     private Integer jugadoresLesionados;
     private Double promedioEquipo;
+
 }
