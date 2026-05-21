@@ -24,6 +24,16 @@
 * **Capa Analítica de Rendimiento:** Se integró el servicio de rendimiento para evaluar el nivel real de cada futbolista, conectando los goles, asistencias y minutos jugados directamente con sus datos personales.
 * **Seguridad y Control de Acceso (Auth):** Se implementó el servicio de autenticación para proteger el sistema, permitiendo crear sesiones seguras y validar de forma interna las credenciales de los usuarios que entran a la plataforma.
 * **Solución de Errores y Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, limpiando los archivos de configuración de base de datos para asegurar que todo el equipo trabaje sobre la versión correcta en GitHub.
+
+**Mejoras en Reportes-service**
+* **Fecha automatica:** Se elimino el campo fechaGeneracion del DTO de entrada. El sistema ahora asigna la fecha del dia en que se genera el reporte de forma automatica, simplificando el uso del endpoint.
+* **CRUD Completo:** Se agregaron los endpoints GET por ID y DELETE que faltaban, dejando el servicio con las 4 operaciones necesarias.
+* **Correccion del cliente WebClient:** Se agrego el header Content-Type explicitamente en la llamada al rendimiento-service para asegurar que el calculo del promedio funcione correctamente en todos los casos.
+* **Mejora de logs:** Se mejoraron los mensajes de trazabilidad en el RendimientoClient para que quede claro en consola por que razon falla o tiene exito el calculo del promedio de cada jugador.
+
+**Mejoras en Recomendaciones-service**
+* **Correccion del cliente de rendimiento:** Se agrego el header Content-Type explicitamente en la llamada POST al rendimiento-service, corrigiendo el mismo problema que afectaba al reportes-service.
+* **Trazabilidad en el flujo de analisis:** Se revisaron los logs del servicio para asegurar que quede registrado cuando el analisis de un jugador falla por falta de datos en los servicios dependientes.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)**
