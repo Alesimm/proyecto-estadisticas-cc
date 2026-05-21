@@ -64,5 +64,25 @@
 * **Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, aislando los archivos de entorno local para asegurar que el repositorio quede limpio y profesional en GitHub.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
-### Joseph Rivas
+### Joseph Rivas (Desarrollador responsable: Usuarios-service, Partidos-service y Recomendaciones-service)
+
+**Servicio de Usuarios**
+* Creación de las operaciones básicas para gestionar los perfiles de acceso al sistema, implementando un CRUD completo conectado a MariaDB.
+* Reorganización del código bajo el patrón de arquitectura CSR (Controlador, Servicio y Repositorio) para asegurar la separación de responsabilidades.
+* Desarrollo de reglas de negocio críticas, incluyendo la prevención de correos duplicados (tanto en creación como actualización) y la validación estricta de dominios permitidos para roles (ADMIN, DT, MEDICO) y estados (ACTIVO, INACTIVO).
+* **Control de Excepciones Centralizado:** Implementación de un `GlobalExceptionHandler` para interceptar fallos de Bean Validation y reglas de dominio, devolviendo mensajes JSON limpios y semánticos (Error 400) en lugar de trazas de error del servidor.
+
+**Servicio de Partidos**
+* **CRUD Completo y Arquitectura CSR:** Desarrollo de las operaciones (crear, listar y eliminar) para la gestión del calendario de encuentros deportivos, estructurando el microservicio bajo el patrón estricto de Controlador, Servicio y Repositorio.
+* **Limpieza Arquitectónica:** Adaptación del microservicio para actuar puramente como "Proveedor de Datos" mediante API REST, eliminando dependencias externas (Eureka/Gateway) para establecer una comunicación directa y optimizada.
+* **Implementación de DTOs y Validación:** Uso de objetos de transferencia de datos (DTO) con `Bean Validation` para asegurar la integridad de los datos entrantes (ej. evitar el registro de goles negativos o campos en blanco).
+* **Reglas de Negocio Estrictas:** Configuración de validaciones en el servidor para evitar la duplicidad exacta de partidos (mismo rival, torneo y fecha) y prevenir incoherencias lógicas (como el bloqueo de registros donde el equipo local juegue contra sí mismo).
+* **Control de Excepciones Estandarizado:** Integración de un `GlobalExceptionHandler` unificado (espejo de `jugadores-service`) para atrapar errores de formulario, violaciones a reglas de negocio y fallos graves del servidor, devolviendo respuestas JSON amigables.
+* **Control de Versiones (Flyway):** Automatización de la creación de la estructura de tablas en MariaDB y carga de scripts con datos de prueba iniciales.
+
+**Servicio de Recomendaciones (Motor Analítico y WebClient)**
+* **Orquestación de Microservicios:** Desarrollo del motor de decisiones del sistema, cruzando información en tiempo real mediante `WebClient` hacia los puertos de Jugadores, Rendimiento y Estadísticas.
+* **Implementación de Algoritmo Táctico:** Creación de la lógica condicional que evalúa dinámicamente las notas de rendimiento y la fatiga física (minutos acumulados) para generar prioridades (ALTA, MEDIA, BAJA) y sugerencias tácticas automáticas.
+* **Resiliencia y Tolerancia a Fallos (Blindaje de Código):** Integración de bloques de protección avanzados para aislar fallos de red. Si un microservicio externo se desconecta o no tiene datos, el sistema captura el error internamente evitando que la aplicación colapse (Error 500), devolviendo un mensaje semántico de estado.
+* **Mapeo Dinámico de Datos:** Configuración de lectura de estructuras de datos tipo `List<Map>` para extraer valores independientemente de las variaciones de nomenclatura en las bases de datos externas (ej. compatibilidad entre `nota_final` y `notaRendimiento`).
 
