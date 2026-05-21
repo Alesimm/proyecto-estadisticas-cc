@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ReporteResponseDTO {
+
     private Long id;
     private String autorReporte;
     private String tipoReporte;
@@ -13,4 +14,5 @@ public class ReporteResponseDTO {
     private Integer totalPlantel;
     private Integer jugadoresLesionados;
     private Double promedioEquipo;
+
 }

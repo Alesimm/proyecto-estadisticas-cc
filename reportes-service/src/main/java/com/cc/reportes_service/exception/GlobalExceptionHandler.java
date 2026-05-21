@@ -12,24 +12,31 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Captura errores de validacion (@NotBlank, @NotNull, etc.)
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException problemita) {
+    public ResponseEntity<Map<String, String>> handleValidacion(MethodArgumentNotValidException problemita) {
         Map<String, String> errores = new HashMap<>();
-        problemita.getBindingResult().getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+        problemita.getBindingResult().getFieldErrors()
+                .forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
+    // Captura errores de logica como ID no encontrado
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleLogic(IllegalArgumentException problemita) {
+    public ResponseEntity<Map<String, String>> handleLogica(IllegalArgumentException problemita) {
         Map<String, String> error = new HashMap<>();
         error.put("error", problemita.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    // Captura cualquier otro error inesperado del servidor
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGlobal(Exception problemita) {
+    public ResponseEntity<Map<String, String>> handleGeneral(Exception problemita) {
         Map<String, String> error = new HashMap<>();
         error.put("error", "Ocurrio un error inesperado en el servidor");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }
