@@ -4,11 +4,15 @@ import com.cc.rendimiento_service.client.*;
 import com.cc.rendimiento_service.dto.*;
 import com.cc.rendimiento_service.entity.Rendimiento;
 import com.cc.rendimiento_service.repository.RendimientoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class RendimientoService {
 
     @Autowired
@@ -21,19 +25,20 @@ public class RendimientoService {
     private EstadisticaClient estadisticaClient;
 
     public RendimientoResponseDTO calcular(RendimientoRequestDTO dto) {
+        log.info("Calculando rendimiento para jugador ID: {}", dto.getIdJugador());
 
-        // 1. Recopilamos la informacion usando nuestros clientes
+        // eecopilamos la informacion
         String pos = jugadorClient.obtenerPosicion(dto.getIdJugador());
         Map stats = estadisticaClient.obtenerStats(dto.getIdJugador());
 
-        // 2. Extraemos los valores clave de forma limpia
-        int mins = (int) stats.get("minutosJugados");
-        int goles = (int) stats.get("golesTotales");
-        int recup = (int) stats.get("recuperaciones");
-        int recibidos = (int) stats.get("golesRecibidos");
+        // extraemos los valores clave
+        int mins       = (int) stats.get("minutosJugados");
+        int goles      = (int) stats.get("golesTotales");
+        int recup      = (int) stats.get("recuperaciones");
+        int recibidos  = (int) stats.get("golesRecibidos");
 
-        // 3. Logica de calificacion por posicion
-        double nota = 4.0; // Todos parten con nota base
+        // logica de calificacion por posicion
+        double nota = 4.0;
         int impacto = pos.equalsIgnoreCase("Arquero") ? recibidos : goles;
 
         if (pos.equalsIgnoreCase("Arquero")) {
@@ -46,11 +51,10 @@ public class RendimientoService {
             nota += (recup * 0.1);
         }
 
-        // 4. Aseguramos que la nota no rompa la escala del 1 al 7
         nota = Math.max(1.0, Math.min(7.0, nota));
         nota = Math.round(nota * 10.0) / 10.0;
 
-        // 5. Guardamos en la base de datos (si ya existe, lo pisa)
+        // guardamos en la base de datos
         Rendimiento r = repository.findByIdJugador(dto.getIdJugador()).orElse(new Rendimiento());
         r.setIdJugador(dto.getIdJugador());
         r.setPosicion(pos);
@@ -60,12 +64,19 @@ public class RendimientoService {
         r.setNotaFinal(nota);
 
         Rendimiento guardado = repository.save(r);
+        log.info("Rendimiento guardado para jugador ID {} -> nota: {}", dto.getIdJugador(), nota);
 
-        // 6. Devolvemos la respuesta formateada
         return mapear(guardado);
     }
 
-    // Convertidor simple de Entidad a DTO
+    // retorna todos los rendimientos calculados y guardados en la BD
+    public List<RendimientoResponseDTO> listarTodos() {
+        log.info("Listando todos los rendimientos guardados");
+        return repository.findAll().stream()
+                .map(this::mapear)
+                .toList();
+    }
+
     private RendimientoResponseDTO mapear(Rendimiento r) {
         RendimientoResponseDTO res = new RendimientoResponseDTO();
         res.setId(r.getId());
@@ -77,4 +88,5 @@ public class RendimientoService {
         res.setNotaFinal(r.getNotaFinal());
         return res;
     }
+
 }
