@@ -4,85 +4,86 @@
 ### Alexander Simpertigue (Desarrollador responsable: Jugadores-service, Rendimiento-service y Auth-service)
 
 **Servicio de Jugadores**
-* Creación de las operaciones básicas para gestionar la información de los jugadores en la base de datos.
-* Implementación de objetos de transferencia de datos (DTO) para proteger la estructura interna de la base de datos.
-* Reorganización del código en tres capas independientes (Controlador, Servicio y Repositorio) para mejorar el mantenimiento.
-* Configuración de reglas automáticas para validar que los datos recibidos sean correctos.
-* Creación de una lógica en el servidor para evitar errores de negocio, como la duplicación de números de camiseta.
-* Desarrollo de un sistema centralizado para capturar fallos y entregar mensajes de error claros al usuario.
+* Creamos el CRUD completo para manejar la informacion de los jugadores del plantel.
+* Usamos DTOs para separar lo que el usuario ve de lo que esta en la base de datos.
+* Organizamos el codigo en tres capas: Controller, Service y Repository, para que cada parte haga una sola cosa.
+* Agregamos validaciones automaticas en los datos que llegan, como edad minima y campos obligatorios.
+* Implementamos una regla que impide que dos jugadores tengan el mismo numero de camiseta.
+* Creamos un manejador central de errores que devuelve mensajes claros cuando algo sale mal.
 
 **Actualizaciones (Flyway y Busquedas)**
-* **Control de Versiones (Flyway):** Se integro Flyway para automatizar la creacion de la tabla y la insercion de los datos iniciales, asegurando que todos tengan la misma estructura de base de datos.
-* **Optimizacion para XAMPP:** Se actualizo el driver a MariaDB para tener compatibilidad nativa perfecta y evitar errores en las migraciones.
-* **CRUD Completo:** Se agregaron funciones de busqueda especificas (por ID y por posicion) para tener el microservicio 100% operativo.
-  
-**Actualizaciones Eliminacion (Eureka)**
-* **Principal:** Eliminamos Eureka y el Gateway.
-* **Conexión inteligente con WebClient:** Ahora usamos un "cliente web" para que un microservicio pueda pedirle datos a otro. Por ejemplo, cuando necesitemos saber el rendimiento de un jugador, el sistema irá a buscar su posición automáticamente.
+* **Flyway:** Integramos Flyway para que la base de datos se cree y se pueble automaticamente al arrancar el servicio, sin configuracion manual.
+* **MariaDB:** Cambiamos el driver a MariaDB para tener compatibilidad perfecta con XAMPP y evitar errores al migrar.
+* **CRUD Completo:** Agregamos busqueda por ID y por posicion para tener el servicio completamente operativo.
 
-**Nuevos Avances (Rendimiento-service, auth-service y Arreglos)**
-* **Capa Analítica de Rendimiento:** Se integró el servicio de rendimiento para evaluar el nivel real de cada futbolista, conectando los goles, asistencias y minutos jugados directamente con sus datos personales.
-* **Seguridad y Control de Acceso (Auth):** Se implementó el servicio de autenticación para proteger el sistema, permitiendo crear sesiones seguras y validar de forma interna las credenciales de los usuarios que entran a la plataforma.
-* **Solución de Errores y Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, limpiando los archivos de configuración de base de datos para asegurar que todo el equipo trabaje sobre la versión correcta en GitHub.
+**Actualizaciones Eliminacion (Eureka)**
+* **Principal:** Eliminamos Eureka y el Gateway del proyecto.
+* **WebClient:** Reemplazamos la comunicacion por WebClient, que permite que un servicio le pida datos a otro directamente, sin intermediarios.
+
+**Nuevos Avances (Rendimiento-service, Auth-service y Arreglos)**
+* **Rendimiento:** Desarrollamos el servicio que calcula la nota de cada jugador consultando su posicion y sus estadisticas en tiempo real desde otros dos servicios.
+* **Auth:** Implementamos el sistema de login que valida las credenciales del usuario contra usuarios-service y genera un token unico si todo es correcto.
+* **Git:** Resolvimos los conflictos de fusion entre ramas y limpiamos los archivos de configuracion local para que el repositorio quedara ordenado.
 
 **Mejoras en Reportes-service**
-* **Fecha automatica:** Se elimino el campo fechaGeneracion del DTO de entrada. El sistema ahora asigna la fecha del dia en que se genera el reporte de forma automatica, simplificando el uso del endpoint.
-* **CRUD Completo:** Se agregaron los endpoints GET por ID y DELETE que faltaban, dejando el servicio con las 4 operaciones necesarias.
-* **Correccion del cliente WebClient:** Se agrego el header Content-Type explicitamente en la llamada al rendimiento-service para asegurar que el calculo del promedio funcione correctamente en todos los casos.
-* **Mejora de logs:** Se mejoraron los mensajes de trazabilidad en el RendimientoClient para que quede claro en consola por que razon falla o tiene exito el calculo del promedio de cada jugador.
+* **Fecha automatica:** Quitamos el campo de fecha del body. Ahora el sistema asigna automaticamente la fecha del dia en que se genera el reporte.
+* **CRUD Completo:** Agregamos los endpoints GET por ID y DELETE que faltaban.
+* **WebClient:** Corregimos el header Content-Type en la llamada al rendimiento-service para que el calculo del promedio del equipo funcionara correctamente.
+* **Logs:** Mejoramos los mensajes de consola para que sea facil saber cuando el calculo del promedio falla y por que razon.
 
 **Mejoras en Recomendaciones-service**
-* **Correccion del cliente de rendimiento:** Se agrego el header Content-Type explicitamente en la llamada POST al rendimiento-service, corrigiendo el mismo problema que afectaba al reportes-service.
-* **Trazabilidad en el flujo de analisis:** Se revisaron los logs del servicio para asegurar que quede registrado cuando el analisis de un jugador falla por falta de datos en los servicios dependientes.
+* **WebClient:** Aplicamos la misma correccion del header Content-Type en la llamada al rendimiento-service.
+* **Logs:** Revisamos los logs del servicio para que quede registrado cuando el analisis de un jugador no puede completarse por falta de datos.
+
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
-### Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)**
+### Cristobal Moya (Desarrollador responsable: Formaciones-service, Estadisticas-service, Lesiones-service y Reportes-service)
 
 **Servicio de Formaciones**
-* Creación de las operaciones básicas para gestionar las alineaciones tácticas del equipo en la base de datos.
-* Implementación de objetos de transferencia de datos (DTO) para proteger la estructura interna de la base de datos.
-* Reorganización del código en tres capas independientes (Controlador, Servicio y Repositorio) para mejorar el mantenimiento.
-* **Control de Versiones (Flyway):** Se integró Flyway para automatizar la creación de las tablas y asegurar la estructura táctica inicial.
+* Creamos el CRUD para registrar y consultar las alineaciones tacticas del equipo.
+* Usamos DTOs para proteger la estructura interna de la base de datos.
+* Organizamos el codigo bajo el patron CSR para separar responsabilidades claramente.
+* **Flyway:** Automatizamos la creacion de la tabla y la carga de formaciones iniciales de prueba.
 
-**Servicio de Estadísticas**
-* Creación de las operaciones básicas para registrar y consultar las métricas de juego (goles, recuperaciones, minutos).
-* Configuración de reglas automáticas para validar que los datos recibidos sean correctos.
-* Desarrollo de un sistema centralizado para capturar fallos y entregar mensajes de error claros al usuario.
-* **Optimización para MariaDB:** Se ajustaron los parámetros de conexión nativa para evitar bloqueos y limpiar los ruidos del servidor en la consola.
+**Servicio de Estadisticas**
+* Implementamos el registro de metricas de partido por jugador: goles, asistencias, minutos y recuperaciones.
+* Agregamos validaciones para rechazar datos incoherentes, como tener goles con cero minutos jugados.
+* Creamos el manejador de errores centralizado para devolver mensajes claros al usuario.
+* **MariaDB:** Ajustamos la conexion para eliminar los mensajes de ruido que aparecian en la consola al arrancar.
 
 **Servicio de Lesiones**
-* Creación de las operaciones básicas para gestionar el estado médico y los tiempos de recuperación del plantel.
-* Creación de una lógica en el servidor para evitar errores de negocio y mantener la coherencia sobre qué jugadores están disponibles.
-* **CRUD Completo:** Se agregaron funciones de búsqueda específicas para tener el microservicio 100% operativo y listo para su consumo.
+* Construimos el modulo medico del sistema para registrar y gestionar el estado de salud del plantel.
+* Implementamos reglas de negocio como bloquear una segunda lesion activa para el mismo jugador, y forzar los dias de recuperacion a cero cuando el estado es Alta Medica.
+* **CRUD Completo:** Agregamos las funciones de busqueda especificas para tener el servicio listo para ser consumido por otros.
 
-**Servicio de Reportes (Orquestación y WebClient)**
-* **Orquestación Centralizada:** Creación del servicio que actúa como un "agregador", consolidando la información de múltiples puertos en un solo documento final.
-* **Conexión Inteligente con WebClient:** Ahora usamos un "cliente web" avanzado. El sistema viaja automáticamente para listar a los jugadores, cruza los datos con los lesionados y calcula matemáticamente el rendimiento.
-* **Resiliencia y Tolerancia a Fallos:** Se implementó un mecanismo de protección para asegurar que el sistema de reportes no colapse si un microservicio externo falla, permitiendo generar informes estables siempre.
+**Servicio de Reportes (Orquestacion y WebClient)**
+* **Agregador Central:** Desarrollamos el servicio que consolida informacion de tres fuentes distintas en un solo reporte: el total del plantel, los jugadores en tratamiento y el promedio de rendimiento del equipo.
+* **WebClient:** El sistema viaja automaticamente a jugadores-service, lesiones-service y rendimiento-service para recolectar los datos en tiempo real.
+* **Tolerancia a Fallos:** Si alguno de los servicios externos no responde, el reporte se genera igual con los datos disponibles sin que el sistema se caiga.
 
-**Solución de Errores y Git**
-* **Limpieza en Git:** Identificamos y corregimos los conflictos de código que aparecían al fusionar las ramas del proyecto, aislando los archivos de entorno local para asegurar que el repositorio quede limpio y profesional en GitHub.
+**Solucion de Errores y Git**
+* **Git:** Resolvimos los conflictos de fusion entre ramas y aislamos los archivos de configuracion local para que el repositorio quedara limpio y profesional.
+
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Joseph Rivas (Desarrollador responsable: Usuarios-service, Partidos-service y Recomendaciones-service)
 
 **Servicio de Usuarios**
-* Creación de las operaciones básicas para gestionar los perfiles de acceso al sistema, implementando un CRUD completo conectado a MariaDB.
-* Reorganización del código bajo el patrón de arquitectura CSR (Controlador, Servicio y Repositorio) para asegurar la separación de responsabilidades.
-* Desarrollo de reglas de negocio críticas, incluyendo la prevención de correos duplicados (tanto en creación como actualización) y la validación estricta de dominios permitidos para roles (ADMIN, DT, MEDICO) y estados (ACTIVO, INACTIVO).
-* **Control de Excepciones Centralizado:** Implementación de un `GlobalExceptionHandler` para interceptar fallos de Bean Validation y reglas de dominio, devolviendo mensajes JSON limpios y semánticos (Error 400) en lugar de trazas de error del servidor.
+* Construimos el CRUD completo para gestionar los perfiles de acceso al sistema, conectado a MariaDB.
+* Organizamos el codigo bajo el patron CSR para mantener las responsabilidades separadas.
+* Implementamos reglas de negocio como impedir correos duplicados y validar que solo existan los roles ADMIN, DT y MEDICO, y los estados ACTIVO e INACTIVO.
+* **Manejo de Errores:** Creamos un GlobalExceptionHandler que intercepta errores de validacion y de negocio, devolviendo mensajes JSON claros en vez de errores tecnicos del servidor.
 
 **Servicio de Partidos**
-* **CRUD Completo y Arquitectura CSR:** Desarrollo de las operaciones (crear, listar y eliminar) para la gestión del calendario de encuentros deportivos, estructurando el microservicio bajo el patrón estricto de Controlador, Servicio y Repositorio.
-* **Limpieza Arquitectónica:** Adaptación del microservicio para actuar puramente como "Proveedor de Datos" mediante API REST, eliminando dependencias externas (Eureka/Gateway) para establecer una comunicación directa y optimizada.
-* **Implementación de DTOs y Validación:** Uso de objetos de transferencia de datos (DTO) con `Bean Validation` para asegurar la integridad de los datos entrantes (ej. evitar el registro de goles negativos o campos en blanco).
-* **Reglas de Negocio Estrictas:** Configuración de validaciones en el servidor para evitar la duplicidad exacta de partidos (mismo rival, torneo y fecha) y prevenir incoherencias lógicas (como el bloqueo de registros donde el equipo local juegue contra sí mismo).
-* **Control de Excepciones Estandarizado:** Integración de un `GlobalExceptionHandler` unificado (espejo de `jugadores-service`) para atrapar errores de formulario, violaciones a reglas de negocio y fallos graves del servidor, devolviendo respuestas JSON amigables.
-* **Control de Versiones (Flyway):** Automatización de la creación de la estructura de tablas en MariaDB y carga de scripts con datos de prueba iniciales.
+* **CRUD Completo:** Desarrollamos las operaciones de crear, listar y eliminar partidos del calendario deportivo, siguiendo el patron CSR.
+* **Sin dependencias externas:** Eliminamos Eureka y Gateway para que el servicio se comunique directamente como proveedor de datos REST.
+* **DTOs y Validacion:** Usamos Bean Validation para rechazar datos invalidos como goles negativos o campos vacios.
+* **Reglas de Negocio:** Bloqueamos el registro de partidos duplicados con el mismo rival, torneo y fecha, y tambien impedimos que Colo-Colo quede registrado jugando contra si mismo.
+* **Manejo de Errores:** Integramos el mismo GlobalExceptionHandler que los otros servicios para devolver respuestas JSON consistentes en todos los casos.
+* **Flyway:** Automatizamos la creacion de la tabla y la carga de partidos iniciales de prueba.
 
-**Servicio de Recomendaciones (Motor Analítico y WebClient)**
-* **Orquestación de Microservicios:** Desarrollo del motor de decisiones del sistema, cruzando información en tiempo real mediante `WebClient` hacia los puertos de Jugadores, Rendimiento y Estadísticas.
-* **Implementación de Algoritmo Táctico:** Creación de la lógica condicional que evalúa dinámicamente las notas de rendimiento y la fatiga física (minutos acumulados) para generar prioridades (ALTA, MEDIA, BAJA) y sugerencias tácticas automáticas.
-* **Resiliencia y Tolerancia a Fallos (Blindaje de Código):** Integración de bloques de protección avanzados para aislar fallos de red. Si un microservicio externo se desconecta o no tiene datos, el sistema captura el error internamente evitando que la aplicación colapse (Error 500), devolviendo un mensaje semántico de estado.
-* **Mapeo Dinámico de Datos:** Configuración de lectura de estructuras de datos tipo `List<Map>` para extraer valores independientemente de las variaciones de nomenclatura en las bases de datos externas (ej. compatibilidad entre `nota_final` y `notaRendimiento`).
-
+**Servicio de Recomendaciones (Motor Analitico y WebClient)**
+* **Orquestador:** Desarrollamos el motor de sugerencias tacticas que cruza datos de tres servicios en tiempo real usando WebClient: jugadores, estadisticas y rendimiento.
+* **Algoritmo Tactico:** Si un jugador tiene nota alta y pocos minutos, el sistema sugiere que sea titular. Si acumula mucha fatiga, sugiere descanso. Si su nota es baja, sugiere entrenamiento especial. Cada sugerencia tiene prioridad ALTA, MEDIA o BAJA.
+* **Tolerancia a Fallos:** Si un servicio externo no responde, el sistema captura el error internamente y devuelve un mensaje controlado en lugar de caerse con un 500.
+* **Lectura Flexible de Datos:** Configuramos el cliente para leer los datos con List<Map>, lo que permite adaptarse a variaciones en los nombres de los campos entre servicios.
