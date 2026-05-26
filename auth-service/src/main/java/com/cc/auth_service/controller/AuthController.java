@@ -20,7 +20,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> iniciarSesion(@Valid @RequestBody AuthRequestDTO request) {
-        log.info("Peticion POST a /api/auth/login recibida");
+        log.info("Peticion POST recibida");
         return ResponseEntity.ok(authService.login(request));
     }
 }

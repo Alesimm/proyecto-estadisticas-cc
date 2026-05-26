@@ -13,7 +13,7 @@ public class EstadisticaClient {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    // Traemos todas las estadisticas del puerto 8083 y filtramos al jugador que nos interesa
+    // traemo todas las estadisticas y filtramos al jugador que nos interesa
     public Map obtenerStats(Long id) {
         List<Map> lista = webClientBuilder.build().get()
                 .uri("http://localhost:8083/api/estadisticas")

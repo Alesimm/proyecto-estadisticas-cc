@@ -27,7 +27,6 @@ public class RendimientoService {
     public RendimientoResponseDTO calcular(RendimientoRequestDTO dto) {
         log.info("Calculando rendimiento para jugador ID: {}", dto.getIdJugador());
 
-        // eecopilamos la informacion
         String pos = jugadorClient.obtenerPosicion(dto.getIdJugador());
         Map stats = estadisticaClient.obtenerStats(dto.getIdJugador());
 
@@ -37,16 +36,13 @@ public class RendimientoService {
         int recup      = (int) stats.get("recuperaciones");
         int recibidos  = (int) stats.get("golesRecibidos");
 
-        // logica de calificacion por posicion
         double nota = 4.0;
         int impacto = pos.equalsIgnoreCase("Arquero") ? recibidos : goles;
 
         if (pos.equalsIgnoreCase("Arquero")) {
-            // A los arqueros los evaluamos por cuanto salvan y cuanto les anotan
             nota -= (recibidos * 0.5);
             nota += (recup * 0.2);
         } else {
-            // A los jugadores de campo los premiamos por goles
             nota += (goles * 0.5);
             nota += (recup * 0.1);
         }
@@ -65,11 +61,10 @@ public class RendimientoService {
 
         Rendimiento guardado = repository.save(r);
         log.info("Rendimiento guardado para jugador ID {} -> nota: {}", dto.getIdJugador(), nota);
-
         return mapear(guardado);
     }
 
-    // retorna todos los rendimientos calculados y guardados en la BD
+    // devuelve todos los rendimientos calculados y guardado
     public List<RendimientoResponseDTO> listarTodos() {
         log.info("Listando todos los rendimientos guardados");
         return repository.findAll().stream()
@@ -88,5 +83,4 @@ public class RendimientoService {
         res.setNotaFinal(r.getNotaFinal());
         return res;
     }
-
 }

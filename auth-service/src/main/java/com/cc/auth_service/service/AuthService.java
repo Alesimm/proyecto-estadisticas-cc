@@ -26,23 +26,23 @@ public class AuthService {
     public AuthResponseDTO login(AuthRequestDTO request) {
         log.info("Intento de login para el correo: {}", request.getCorreo());
 
-        // Ir al servicio de Usuarios a buscar la informacion
+        // ir a usuarios a buscar la informacion
         Map<String, Object> usuarioData = usuarioClient.buscarUsuarioPorCorreo(request.getCorreo());
 
-        // Validar Estado
+        // validar Estado
         Object estadoObj = usuarioData.get("estado");
         if (estadoObj == null || !estadoObj.toString().equalsIgnoreCase("ACTIVO")) {
             log.warn("Login rechazado: Usuario inactivo");
             throw new IllegalArgumentException("El usuario se encuentra inactivo y no puede iniciar sesion.");
         }
 
-        // Validar Contrasena REAL
+        // validar Contraseña REAL
         Object passwordObj = usuarioData.get("contrasena");
         if (passwordObj == null || !passwordObj.toString().equals(request.getContrasena())) {
             throw new IllegalArgumentException("Credenciales invalidas (Contrasena incorrecta).");
         }
 
-        // Generar Token Unico
+        // generar Token Unico
         String tokenGenerado = UUID.randomUUID().toString();
         Long idUsuario = Long.valueOf(usuarioData.get("id").toString());
         String rol = usuarioData.get("rol").toString();
