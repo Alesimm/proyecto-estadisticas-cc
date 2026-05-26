@@ -12,8 +12,6 @@ public class JugadorClient {
 
     public String obtenerPosicion(Long id) {
         Map res = webClientBuilder.build().get()
-
-                // ANTES: .uri("http://localhost:8081/api/jugadores/" + id)
                 .uri("http://localhost:8093/api/jugadores/" + id)
                 .retrieve()
                 .bodyToMono(Map.class)

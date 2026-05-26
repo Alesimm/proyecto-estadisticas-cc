@@ -10,7 +10,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Atrapamos cuando el JSON viene vacio o incompleto
+    //  cuando el json viene vacio o incompleto
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> validacion(MethodArgumentNotValidException problemita) {
         Map<String, String> errores = new HashMap<>();
@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errores);
     }
 
-    // Atrapamos problemas de logica o de comunicacion con los otros servicios
+    //  problema de logica o de comunicacion con los otros servicios
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> negocio(IllegalArgumentException problemita) {
         Map<String, String> error = new HashMap<>();
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    // Un paracaidas general por si el servidor colapsa
+    // general por si el servidor colapsa
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> errorGeneral(Exception problemita) {
         Map<String, String> error = new HashMap<>();
