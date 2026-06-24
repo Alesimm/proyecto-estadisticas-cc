@@ -1,0 +1,72 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: gateway-service
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+        - id: auth-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/auth/**
+
+        - id: usuarios-service
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: jugadores-service
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/jugadores/**
+
+        - id: estadisticas-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/estadisticas/**
+
+        - id: rendimiento-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/rendimientos/**
+
+        - id: recomendaciones-service
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/recomendaciones/**
+
+        - id: partidos-service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/partidos/**
+
+        - id: formaciones-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/formaciones/**
+
+        - id: lesiones-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/lesiones/**
+
+        - id: reportes-service
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/reportes/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

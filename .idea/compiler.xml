@@ -16,6 +16,7 @@
         <module name="lesiones-service" />
         <module name="auth-service" />
         <module name="jugadores-service" />
+        <module name="gateway-service" />
         <module name="partidosservice" />
         <module name="estadisticas-service" />
         <module name="usuarios-service" />
@@ -29,6 +30,7 @@
       <module name="estadisticas-service" options="-parameters" />
       <module name="formaciones" options="-parameters" />
       <module name="formaciones-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
       <module name="jugadores-service" options="-parameters" />
       <module name="lesiones-service" options="-parameters" />
       <module name="partidosservice" options="-parameters" />
