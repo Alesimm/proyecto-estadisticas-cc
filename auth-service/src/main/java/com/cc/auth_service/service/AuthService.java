@@ -5,13 +5,13 @@ import com.cc.auth_service.dto.AuthRequestDTO;
 import com.cc.auth_service.dto.AuthResponseDTO;
 import com.cc.auth_service.entity.Sesion;
 import com.cc.auth_service.repository.SesionRepository;
+import com.cc.auth_service.security.JwtUtil; // Importamos la nueva herramienta
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -26,31 +26,33 @@ public class AuthService {
     public AuthResponseDTO login(AuthRequestDTO request) {
         log.info("Intento de login para el correo: {}", request.getCorreo());
 
-        // ir a usuarios a buscar la informacion
+        // ir usuarios buscar informacion
         Map<String, Object> usuarioData = usuarioClient.buscarUsuarioPorCorreo(request.getCorreo());
 
-        // validar Estado
+        // validar estado
         Object estadoObj = usuarioData.get("estado");
         if (estadoObj == null || !estadoObj.toString().equalsIgnoreCase("ACTIVO")) {
             log.warn("Login rechazado: Usuario inactivo");
             throw new IllegalArgumentException("El usuario se encuentra inactivo y no puede iniciar sesion.");
         }
 
-        // validar Contraseña REAL
+        // validar contrsñ
         Object passwordObj = usuarioData.get("contrasena");
         if (passwordObj == null || !passwordObj.toString().equals(request.getContrasena())) {
             throw new IllegalArgumentException("Credenciales invalidas (Contrasena incorrecta).");
         }
 
-        // generar Token Unico
-        String tokenGenerado = UUID.randomUUID().toString();
+        // extrae datos antes de generar el token
         Long idUsuario = Long.valueOf(usuarioData.get("id").toString());
         String rol = usuarioData.get("rol").toString();
+
+        // generar JWT
+        String tokenGenerado = JwtUtil.generarToken(request.getCorreo(), rol);
 
         Sesion sesion = new Sesion();
         sesion.setIdUsuario(idUsuario);
         sesion.setCorreo(request.getCorreo());
-        sesion.setToken(tokenGenerado);
+        sesion.setToken(tokenGenerado); // guardamos el jwt largo en la base de datos (como historial)
         sesion.setRol(rol);
         sesion.setFechaCreacion(LocalDateTime.now().toString());
         sesion.setEstado("ACTIVA");
