@@ -25,10 +25,9 @@ class ReporteControllerTest {
 
     @Test
     void test_crear_reporte_ok() throws Exception {
-        // Mock del servicio
         when(service.generarReporte(any())).thenReturn(ReporteResponseDTO.builder().id(1L).build());
 
-        // JSON con todos los campos requeridos para evitar el error 400 de validación
+        // json con campos para evitar el error 400 d validacion
         String json = "{\"autorReporte\":\"cris\", \"tipoReporte\":\"Mensual\"}";
 
         mockMvc.perform(post("/api/reportes")

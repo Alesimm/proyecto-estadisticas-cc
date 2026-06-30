@@ -53,7 +53,7 @@ class AuthServiceTest {
     @Test
     void test_login_fallo_critico_db() {
         when(usuarioClient.buscarUsuarioPorCorreo(anyString())).thenReturn(Map.of("id", "1", "estado", "ACTIVO", "contrasena", "123", "rol", "ADMIN"));
-        // Simulamos que la base de datos falla al guardar
+        // simulamos que la base de datos falla al guardar
         when(sesionRepository.save(any(Sesion.class))).thenThrow(new RuntimeException("DB falló"));
 
         try (MockedStatic<JwtUtil> jwtMock = mockStatic(JwtUtil.class)) {

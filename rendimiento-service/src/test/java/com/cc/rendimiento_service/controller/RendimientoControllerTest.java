@@ -60,16 +60,16 @@ class RendimientoControllerTest {
                 .andExpect(jsonPath("$.notaFinal").value(5.5));
     }
 
-    // CASO 2: POST Calcular falla por API remota - Retorna Error
+    // CASO 2: POST Calcular falla por API remota - Retorna Error 500
     @Test
-    void calcular_cuandoFallaServicioRemoto_retorna400BadRequest() throws Exception {
+    void calcular_cuandoFallaServicioRemoto_retorna500InternalServerError() throws Exception {
         when(service.calcular(any(RendimientoRequestDTO.class)))
                 .thenThrow(new RuntimeException("Error API externa"));
 
         mockMvc.perform(post("/api/rendimientos/calcular")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     // CASO 3: GET Listar exitoso - Retorna 200

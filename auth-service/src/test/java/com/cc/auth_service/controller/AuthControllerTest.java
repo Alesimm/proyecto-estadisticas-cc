@@ -34,7 +34,8 @@ class AuthControllerTest {
 
     @Test
     void test_login_invalido() throws Exception {
-        // Tu log mostró que el servicio lanza IllegalArgumentException y el handler responde 401
+
+        // handler responde 401
         when(authService.login(any())).thenThrow(new IllegalArgumentException("error"));
 
         mockMvc.perform(post("/api/auth/login")
@@ -45,7 +46,7 @@ class AuthControllerTest {
 
     @Test
     void test_login_error_500() throws Exception {
-        // Tu log mostró que el servicio lanza RuntimeException y el handler responde 500
+        // handler responde 500
         when(authService.login(any())).thenThrow(new RuntimeException("error fatal"));
 
         mockMvc.perform(post("/api/auth/login")
