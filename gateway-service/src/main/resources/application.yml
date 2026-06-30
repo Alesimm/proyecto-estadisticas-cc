@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: gateway-service
+  profiles:
+    active: dev
   main:
     web-application-type: reactive
   cloud:
@@ -14,6 +16,20 @@ spring:
             allowedOrigins: "*"
             allowedMethods: "*"
             allowedHeaders: "*"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    gateway:
       routes:
         - id: auth-service
           uri: http://localhost:8091
@@ -65,8 +81,60 @@ spring:
           predicates:
             - Path=/api/reportes/**
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,gateway
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://auth-service:8091}
+          predicates:
+            - Path=/api/auth/**
+
+        - id: usuarios-service
+          uri: ${USUARIOS_SERVICE_URL:http://usuarios-service:8090}
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: jugadores-service
+          uri: ${JUGADORES_SERVICE_URL:http://jugadores-service:8093}
+          predicates:
+            - Path=/api/jugadores/**
+
+        - id: estadisticas-service
+          uri: ${ESTADISTICAS_SERVICE_URL:http://estadisticas-service:8083}
+          predicates:
+            - Path=/api/estadisticas/**
+
+        - id: rendimiento-service
+          uri: ${RENDIMIENTO_SERVICE_URL:http://rendimiento-service:8087}
+          predicates:
+            - Path=/api/rendimientos/**
+
+        - id: recomendaciones-service
+          uri: ${RECOMENDACIONES_SERVICE_URL:http://recomendaciones-service:8089}
+          predicates:
+            - Path=/api/recomendaciones/**
+
+        - id: partidos-service
+          uri: ${PARTIDOS_SERVICE_URL:http://partidos-service:8092}
+          predicates:
+            - Path=/api/partidos/**
+
+        - id: formaciones-service
+          uri: ${FORMACIONES_SERVICE_URL:http://formaciones-service:8085}
+          predicates:
+            - Path=/api/formaciones/**
+
+        - id: lesiones-service
+          uri: ${LESIONES_SERVICE_URL:http://lesiones-service:8084}
+          predicates:
+            - Path=/api/lesiones/**
+
+        - id: reportes-service
+          uri: ${REPORTES_SERVICE_URL:http://reportes-service:8088}
+          predicates:
+            - Path=/api/reportes/**

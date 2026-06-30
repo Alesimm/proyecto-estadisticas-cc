@@ -52,7 +52,6 @@ class RendimientoServiceTest {
         rendimiento.setPosicion("Delantero");
         rendimiento.setNotaFinal(5.5);
 
-        // Mapa exacto que espera tu método obtenerStats()
         statsMock = Map.of(
                 "minutosJugados", 90,
                 "golesTotales", 2,
@@ -61,7 +60,7 @@ class RendimientoServiceTest {
         );
     }
 
-    // CASO 1: Calcular rendimiento exitoso (Llama a los 2 WebClients y guarda)
+    // calcula rendimiento exitoso llama a los 2 webclient y guarda
     @Test
     void calcular_cuandoTodoEsExitoso_calculaYGuardaCorrectamente() {
         when(jugadorClient.obtenerPosicion(1L)).thenReturn("Delantero");
@@ -78,7 +77,7 @@ class RendimientoServiceTest {
         verify(repository, times(1)).save(any(Rendimiento.class));
     }
 
-    // CASO 2: Error en WebClient (Ej. Jugador no existe)
+    // error en webclient
     @Test
     void calcular_cuandoWebClientJugadorFalla_lanzaExcepcion() {
         when(jugadorClient.obtenerPosicion(1L)).thenThrow(new RuntimeException("Jugador no encontrado"));
@@ -90,7 +89,7 @@ class RendimientoServiceTest {
         verify(repository, never()).save(any(Rendimiento.class));
     }
 
-    // CASO 3: Listar rendimientos exitoso
+    // listar rendimientos
     @Test
     void listarTodos_retornaListaDeRendimientos() {
         when(repository.findAll()).thenReturn(List.of(rendimiento));
